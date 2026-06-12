@@ -1,0 +1,37 @@
+# Refresh data/fuelPrices.json from the OpenVan.camp public fuel API
+# (CC BY 4.0) roughly every two weeks. If the fetch fails or returns too few
+# countries, the script exits non-zero and the last-good JSON stays in place.
+# A commit only happens when prices actually changed; Vercel's git integration
+# then auto-deploys it.
+name: Update fuel prices
+
+on:
+  schedule:
+    # cron can't express "every 14 days" — 1st and 15th at 05:17 UTC is close
+    - cron: "17 5 1,15 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Fetch and normalize prices
+        run: node scripts/update-fuel-prices.ts
+      - name: Commit if changed
+        run: |
+          if git diff --quiet data/fuelPrices.json; then
+            echo "No price changes — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/fuelPrices.json
+          git commit -m "chore: refresh fuel prices from OpenVan.camp (CC BY 4.0)"
+          git push

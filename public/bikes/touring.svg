@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <!-- Royalty-free placeholder silhouette (tourer / bagger). Swap via Bike.imageUrl. -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4654"/>
+      <stop offset="1" stop-color="#1b2230"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#3aa0ff" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#3aa0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="320" cy="312" rx="280" ry="26" fill="url(#glow)"/>
+  <circle cx="158" cy="266" r="56" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="158" cy="266" r="20" stroke="#46556a" stroke-width="6"/>
+  <circle cx="488" cy="266" r="56" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="488" cy="266" r="20" stroke="#46556a" stroke-width="6"/>
+  <path d="M158 266 L198 186 L214 194 L176 270 Z" fill="#28313f"/>
+  <!-- big front fairing, long low body, hard bags -->
+  <path d="M120 196 L150 152 L226 150 L320 142 L420 150 L470 168 L500 204 L460 222 L360 210 L260 216 L196 222 L142 214 Z" fill="url(#body)"/>
+  <!-- batwing fairing + screen -->
+  <path d="M150 152 L138 110 L186 122 L196 148 Z" fill="#22405c" opacity="0.85"/>
+  <path d="M120 196 L92 206 L140 214 Z" fill="#2c3543"/>
+  <!-- saddlebags -->
+  <rect x="420" y="196" width="76" height="54" rx="10" fill="#222b38"/>
+  <!-- floorboards + exhaust -->
+  <path d="M250 226 L330 222 L334 238 L256 242 Z" fill="#1a212c"/>
+  <path d="M334 238 L460 244 L460 258 L338 252 Z" fill="#39455a"/>
+</svg>

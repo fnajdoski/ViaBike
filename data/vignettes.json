@@ -1,0 +1,66 @@
+{
+  "_lastUpdated": "2026-06-12",
+  "_reviewNote": "No reliable free structured feed exists for vignette prices — a 6-month GitHub Action opens a reminder issue to review this file by hand against the official portals listed in each note.",
+  "vignettes": [
+    {
+      "iso2": "CH",
+      "country": "Switzerland",
+      "required": true,
+      "shortestPassLabel": "Annual e-vignette (only option)",
+      "shortestPassPriceEur": 42,
+      "originalPrice": "CHF 40",
+      "note": "No per-km motorway tolls, but the motorway vignette is mandatory. Annual only (valid Dec 1 – Jan 31 of the following year, ~14 months). Motorcycles need their own e-vignette, registered to the plate. Source: via.admin.ch, 2026."
+    },
+    {
+      "iso2": "AT",
+      "country": "Austria",
+      "required": true,
+      "shortestPassLabel": "1-day motorcycle vignette",
+      "shortestPassPriceEur": 3.6,
+      "originalPrice": "≈ €3.60 (1-day) / €5.10 (10-day) / €41.50 (annual)",
+      "note": "Motorcycles have their own cheaper category. 1-day, 10-day, 2-month and annual e-vignettes available (asfinag.at). Some Alpine tunnels (Brenner, Tauern, Arlberg…) charge an EXTRA per-passage toll on top. Prices ~2026 — verify."
+    },
+    {
+      "iso2": "SI",
+      "country": "Slovenia",
+      "required": true,
+      "shortestPassLabel": "Weekly motorcycle e-vignette",
+      "shortestPassPriceEur": 7.5,
+      "originalPrice": "€7.50 (weekly) / €30 (half-year) / €60 (annual)",
+      "note": "Motorcycle category is half the car price. E-vignette registered to the plate (evinjeta.dars.si). Prices ~2026 — verify."
+    },
+    {
+      "iso2": "HU",
+      "country": "Hungary",
+      "required": true,
+      "shortestPassLabel": "10-day D1M motorcycle e-vignette",
+      "shortestPassPriceEur": 9,
+      "originalPrice": "≈ HUF 3,600",
+      "note": "Motorcycles use the cheaper D1M category (nemzetiutdij.hu). 10-day, monthly and annual options. Price ~2026 — verify."
+    },
+    {
+      "iso2": "CZ",
+      "country": "Czechia",
+      "required": false,
+      "note": "Motorcycles are EXEMPT from the Czech e-vignette — ride the motorway for free (edalnice.cz)."
+    },
+    {
+      "iso2": "SK",
+      "country": "Slovakia",
+      "required": false,
+      "note": "Motorcycles are EXEMPT from the Slovak e-vignette (eznamka.sk)."
+    },
+    {
+      "iso2": "RO",
+      "country": "Romania",
+      "required": false,
+      "note": "Motorcycles are EXEMPT from the Romanian rovinietă."
+    },
+    {
+      "iso2": "BG",
+      "country": "Bulgaria",
+      "required": false,
+      "note": "Motorcycles are EXEMPT from the Bulgarian e-vignette (bgtoll.bg)."
+    }
+  ]
+}

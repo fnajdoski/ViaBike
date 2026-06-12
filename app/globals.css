@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night: #07090d;
+  --color-panel: #10151c;
+  --color-panel2: #161e27;
+  --color-line: #232e3a;
+  --color-ink: #e9eef4;
+  --color-mute: #8b98a6;
+  --color-accent: #3aa0ff;
+  --color-fuel: #ff8a3d;
+  --color-rest: #4cc9f0;
+  --color-good: #3ddc97;
+  --color-warn: #ffd166;
+}
+
+body {
+  background: var(--color-night);
+  color: var(--color-ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* Big automotive wordmark treatment */
+.wordmark-solid {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 0.95;
+}
+.wordmark-outline {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 0.95;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(233, 238, 244, 0.32);
+}
+
+/* Subtle perspective grid / horizon behind the bike hero */
+.hero-grid {
+  background:
+    radial-gradient(ellipse 75% 55% at 50% 42%, rgba(58, 160, 255, 0.1), transparent 65%),
+    linear-gradient(to bottom, transparent 54%, rgba(58, 160, 255, 0.05) 55%, transparent 56%),
+    repeating-linear-gradient(to right, rgba(139, 152, 166, 0.07) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(to bottom, rgba(139, 152, 166, 0.05) 0 1px, transparent 1px 48px);
+  mask-image: radial-gradient(ellipse 90% 75% at 50% 45%, black 35%, transparent 78%);
+}
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 0.9rem;
+}
+
+.tile-number {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Map marker chips */
+.marker-chip {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  font: 700 13px/1 var(--font-body), system-ui, sans-serif;
+  color: #0a0d12;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+.marker-wp { background: var(--color-accent); }
+.marker-fuel { background: var(--color-fuel); }
+.marker-rest { background: var(--color-rest); width: 20px; height: 20px; font-size: 11px; }
+
+.maplibregl-popup-content {
+  background: var(--color-panel2);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  border-radius: 0.6rem;
+  font-size: 12px;
+}
+.maplibregl-popup-tip { border-top-color: var(--color-panel2) !important; }

@@ -1,0 +1,38 @@
+# Vignette prices have no reliable free structured feed, so instead of an
+# auto-fetch this opens a reminder issue every 6 months to review
+# data/vignettes.json by hand against the official portals (via.admin.ch,
+# asfinag.at, evinjeta.dars.si, nemzetiutdij.hu, …).
+name: Vignette price review reminder
+
+on:
+  schedule:
+    - cron: "0 6 1 1,7 *" # Jan 1 and Jul 1, 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Scheduled review: vignette prices (${new Date().toISOString().slice(0, 10)})`,
+              labels: ["data-review"],
+              body: [
+                "Six-month reminder to verify `data/vignettes.json` against the official portals:",
+                "",
+                "- 🇨🇭 Switzerland — https://via.admin.ch (annual e-vignette, CHF)",
+                "- 🇦🇹 Austria — https://www.asfinag.at (motorcycle category + tunnel extras)",
+                "- 🇸🇮 Slovenia — https://evinjeta.dars.si (motorcycle = half car price)",
+                "- 🇭🇺 Hungary — https://nemzetiutdij.hu (D1M category)",
+                "- 🇨🇿🇸🇰🇷🇴🇧🇬 — confirm motorcycles are still exempt",
+                "",
+                "Update prices + notes, bump `_lastUpdated`, and commit.",
+              ].join("\n"),
+            });

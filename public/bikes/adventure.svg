@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <!-- Royalty-free placeholder silhouette (adventure bike). Swap via Bike.imageUrl. -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4654"/>
+      <stop offset="1" stop-color="#1b2230"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#3aa0ff" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#3aa0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="320" cy="312" rx="270" ry="26" fill="url(#glow)"/>
+  <!-- wheels -->
+  <circle cx="160" cy="262" r="62" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="160" cy="262" r="24" stroke="#46556a" stroke-width="6"/>
+  <circle cx="480" cy="262" r="62" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="480" cy="262" r="24" stroke="#46556a" stroke-width="6"/>
+  <!-- swingarm + forks -->
+  <path d="M480 262 L386 250 L368 268 Z" fill="#28313f"/>
+  <path d="M160 262 L208 158 L226 166 L182 268 Z" fill="#28313f"/>
+  <!-- tall adventure body: beak, tank, seat, rack -->
+  <path d="M120 170 L196 148 L268 132 L344 122 L420 132 L470 150 L500 190 L470 210 L420 196 L330 188 L250 192 L196 200 L150 196 Z" fill="url(#body)"/>
+  <path d="M120 170 L88 184 L142 196 Z" fill="#2c3543"/>
+  <!-- windscreen -->
+  <path d="M196 148 L176 96 L208 104 L226 142 Z" fill="#22405c" opacity="0.85"/>
+  <!-- seat line -->
+  <path d="M268 132 L344 122 L420 132 L412 148 L330 142 L276 148 Z" fill="#11161d"/>
+  <!-- panniers -->
+  <rect x="430" y="196" width="58" height="52" rx="8" fill="#222b38"/>
+  <!-- exhaust -->
+  <path d="M330 232 L430 240 L430 254 L334 248 Z" fill="#39455a"/>
+</svg>

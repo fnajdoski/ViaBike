@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <!-- Royalty-free placeholder silhouette (sport bike). Swap via Bike.imageUrl. -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4654"/>
+      <stop offset="1" stop-color="#1b2230"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#3aa0ff" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#3aa0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="320" cy="312" rx="270" ry="26" fill="url(#glow)"/>
+  <circle cx="170" cy="268" r="56" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="170" cy="268" r="20" stroke="#46556a" stroke-width="6"/>
+  <circle cx="478" cy="268" r="56" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="478" cy="268" r="20" stroke="#46556a" stroke-width="6"/>
+  <path d="M478 268 L390 252 L376 272 Z" fill="#28313f"/>
+  <path d="M170 268 L212 180 L228 188 L190 274 Z" fill="#28313f"/>
+  <!-- low fairing nose, hump tail -->
+  <path d="M132 196 L210 168 L296 150 L382 150 L440 168 L480 206 L430 224 L340 210 L250 214 L196 220 L150 212 Z" fill="url(#body)"/>
+  <path d="M132 196 L100 200 L148 214 Z" fill="#2c3543"/>
+  <!-- screen -->
+  <path d="M210 168 L200 132 L236 144 L242 162 Z" fill="#22405c" opacity="0.85"/>
+  <!-- tail hump -->
+  <path d="M382 150 L440 138 L470 152 L440 168 Z" fill="#2c3543"/>
+  <!-- belly + exhaust -->
+  <path d="M250 214 L340 210 L352 244 L262 248 Z" fill="#1a212c"/>
+  <path d="M352 244 L432 226 L448 238 L360 258 Z" fill="#39455a"/>
+</svg>

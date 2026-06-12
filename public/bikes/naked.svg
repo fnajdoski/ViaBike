@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <!-- Royalty-free placeholder silhouette (naked bike). Swap via Bike.imageUrl. -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a4654"/>
+      <stop offset="1" stop-color="#1b2230"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#3aa0ff" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#3aa0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="320" cy="312" rx="270" ry="26" fill="url(#glow)"/>
+  <circle cx="170" cy="266" r="58" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="170" cy="266" r="22" stroke="#46556a" stroke-width="6"/>
+  <circle cx="476" cy="266" r="58" stroke="#2c3543" stroke-width="14"/>
+  <circle cx="476" cy="266" r="22" stroke="#46556a" stroke-width="6"/>
+  <path d="M476 266 L386 250 L372 270 Z" fill="#28313f"/>
+  <path d="M170 266 L216 170 L232 178 L190 272 Z" fill="#28313f"/>
+  <!-- exposed trellis vibe: angular tank, slim tail -->
+  <path d="M216 170 L300 146 L372 150 L420 142 L462 156 L430 178 L350 196 L260 206 L210 206 Z" fill="url(#body)"/>
+  <path d="M216 170 L196 150 L240 152 Z" fill="#2c3543"/>
+  <!-- headlight mask -->
+  <path d="M196 150 L182 128 L214 136 Z" fill="#22405c"/>
+  <!-- engine block -->
+  <path d="M260 206 L350 196 L356 240 L272 246 Z" fill="#1a212c"/>
+  <!-- underslung exhaust -->
+  <path d="M356 240 L420 234 L432 248 L362 256 Z" fill="#39455a"/>
+  <!-- tail -->
+  <path d="M420 142 L468 128 L486 142 L462 156 Z" fill="#2c3543"/>
+</svg>
