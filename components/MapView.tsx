@@ -4,27 +4,38 @@ import maplibregl from "maplibre-gl";
 import { useEffect, useRef } from "react";
 import { fmtKm } from "@/lib/format";
 import { useRideCost } from "@/state/store";
+import { useTheme, type Theme } from "@/state/theme";
 
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
 
-const RASTER_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  sources: {
-    carto: {
-      type: "raster",
-      tiles: ["a", "b", "c", "d"].map(
-        (s) => `https://${s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png`,
-      ),
-      tileSize: 256,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+// CARTO light_all is the Positron raster flavor; dark_all the dark matter one
+function rasterStyle(theme: Theme): maplibregl.StyleSpecification {
+  const flavor = theme === "dark" ? "dark_all" : "light_all";
+  return {
+    version: 8,
+    sources: {
+      carto: {
+        type: "raster",
+        tiles: ["a", "b", "c", "d"].map(
+          (s) => `https://${s}.basemaps.cartocdn.com/${flavor}/{z}/{x}/{y}@2x.png`,
+        ),
+        tileSize: 256,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+      },
     },
-  },
-  layers: [{ id: "carto", type: "raster", source: "carto" }],
-};
+    layers: [{ id: "carto", type: "raster", source: "carto" }],
+  };
+}
 
-const STYLE = MAPTILER_KEY
-  ? `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${MAPTILER_KEY}`
-  : RASTER_STYLE;
+function styleFor(theme: Theme): string | maplibregl.StyleSpecification {
+  return MAPTILER_KEY
+    ? `https://api.maptiler.com/maps/dataviz${theme === "dark" ? "-dark" : ""}/style.json?key=${MAPTILER_KEY}`
+    : rasterStyle(theme);
+}
+
+/** Route line casing: dark halo on dark tiles, white halo on light tiles. */
+const CASING: Record<Theme, string> = { dark: "#0a0d12", light: "#ffffff" };
+const ROUTE_BLUE: Record<Theme, string> = { dark: "#3aa0ff", light: "#0d6fd1" };
 
 function chip(className: string, text: string, title?: string): HTMLElement {
   const el = document.createElement("div");
@@ -44,13 +55,15 @@ export default function MapView() {
   const fuelStops = useRideCost((s) => s.fuelStops);
   const restStops = useRideCost((s) => s.restStops);
   const route = useRideCost((s) => s.route);
+  const theme = useTheme((s) => s.theme);
 
-  // init once
+  // init per theme — tiles + line colors are baked into the style, so the
+  // simplest correct theme swap is a rebuild (markers/route re-sync on load)
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: STYLE,
+      style: styleFor(theme),
       center: [13.5, 45.5],
       zoom: 4.4,
       attributionControl: { compact: true },
@@ -63,14 +76,14 @@ export default function MapView() {
         id: "route-casing",
         type: "line",
         source: "route",
-        paint: { "line-color": "#0a0d12", "line-width": 7, "line-opacity": 0.7 },
+        paint: { "line-color": CASING[theme], "line-width": 7, "line-opacity": 0.7 },
         layout: { "line-cap": "round", "line-join": "round" },
       });
       map.addLayer({
         id: "route-line",
         type: "line",
         source: "route",
-        paint: { "line-color": "#3aa0ff", "line-width": 3.5 },
+        paint: { "line-color": ROUTE_BLUE[theme], "line-width": 3.5 },
         layout: { "line-cap": "round", "line-join": "round" },
       });
       syncRoute();
@@ -87,12 +100,14 @@ export default function MapView() {
     });
     mapRef.current = map;
     return () => {
+      for (const m of markersRef.current) m.remove();
+      markersRef.current = [];
       map.remove();
       mapRef.current = null;
       styleReadyRef.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [theme]);
 
   function syncRoute() {
     const map = mapRef.current;

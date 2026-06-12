@@ -34,14 +34,23 @@ export default function BikePicker() {
       />
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((bike) => (
+        {filtered.map((bike) => {
+          // any real photo beats the silhouette, same priority as the hero
+          const cardImage = bike.imageUrlSolo ?? bike.imageUrlLoaded ?? bike.imageUrl;
+          const isSilhouette = cardImage === bike.imageUrl;
+          return (
           <button
             key={bike.id}
             onClick={() => selectBike(bike.id)}
             className="panel group cursor-pointer p-4 text-left transition hover:border-accent/60 hover:bg-panel2"
           >
             <div className="relative h-28">
-              <Image src={bike.imageUrl} alt="" fill className="object-contain opacity-80 transition group-hover:opacity-100" />
+              <Image
+                src={cardImage}
+                alt=""
+                fill
+                className={`object-contain opacity-80 transition group-hover:opacity-100 ${isSilhouette ? "bike-silhouette" : ""}`}
+              />
             </div>
             <p className="text-mute mt-3 text-xs uppercase tracking-widest">{bike.brand}</p>
             <p className="wordmark-solid text-lg">{bike.model}</p>
@@ -50,7 +59,8 @@ export default function BikePicker() {
               <span className="text-ink">~{Math.round(rangeKm(bike, LOAD_FACTOR_SOLO))} km range</span>
             </p>
           </button>
-        ))}
+          );
+        })}
         {filtered.length === 0 && (
           <p className="text-mute col-span-full py-10 text-center text-sm">
             No match — adding a bike is a one-line edit in <code>data/bikes.ts</code>.

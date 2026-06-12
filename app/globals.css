@@ -1,17 +1,56 @@
 @import "tailwindcss";
 
-@theme {
-  --color-night: #07090d;
-  --color-panel: #10151c;
-  --color-panel2: #161e27;
-  --color-line: #232e3a;
-  --color-ink: #e9eef4;
-  --color-mute: #8b98a6;
-  --color-accent: #3aa0ff;
-  --color-fuel: #ff8a3d;
-  --color-rest: #4cc9f0;
-  --color-good: #3ddc97;
-  --color-warn: #ffd166;
+/* ——— Theme tokens ———
+   Light (BMW-Connected-style light graphite) is the default on :root;
+   the original dark palette lives under .dark. Same token names, so every
+   existing utility class themes automatically. */
+:root {
+  --c-night: #edeff2;
+  --c-panel: #ffffff;
+  --c-panel2: #f3f5f8;
+  --c-line: #d7dde4;
+  --c-ink: #1a212a;
+  --c-mute: #5b6672;
+  --c-accent: #0d6fd1;
+  --c-fuel: #d96510;
+  --c-rest: #0e7fa6;
+  --c-good: #178f5f;
+  --c-warn: #9a6e06;
+  --wordmark-stroke: rgba(26, 33, 42, 0.26);
+  --panel-shadow: 0 1px 2px rgba(16, 24, 32, 0.05), 0 8px 22px rgba(16, 24, 32, 0.07);
+  --hero-glow: rgba(13, 111, 209, 0.09);
+  --hero-line: rgba(26, 33, 42, 0.06);
+}
+.dark {
+  --c-night: #07090d;
+  --c-panel: #10151c;
+  --c-panel2: #161e27;
+  --c-line: #232e3a;
+  --c-ink: #e9eef4;
+  --c-mute: #8b98a6;
+  --c-accent: #3aa0ff;
+  --c-fuel: #ff8a3d;
+  --c-rest: #4cc9f0;
+  --c-good: #3ddc97;
+  --c-warn: #ffd166;
+  --wordmark-stroke: rgba(233, 238, 244, 0.32);
+  --panel-shadow: none;
+  --hero-glow: rgba(58, 160, 255, 0.1);
+  --hero-line: rgba(139, 152, 166, 0.07);
+}
+
+@theme inline {
+  --color-night: var(--c-night);
+  --color-panel: var(--c-panel);
+  --color-panel2: var(--c-panel2);
+  --color-line: var(--c-line);
+  --color-ink: var(--c-ink);
+  --color-mute: var(--c-mute);
+  --color-accent: var(--c-accent);
+  --color-fuel: var(--c-fuel);
+  --color-rest: var(--c-rest);
+  --color-good: var(--c-good);
+  --color-warn: var(--c-warn);
 }
 
 body {
@@ -20,7 +59,7 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* Big automotive wordmark treatment */
+/* Big automotive wordmark treatment — graphite on light, white on dark */
 .wordmark-solid {
   font-family: var(--font-display), sans-serif;
   font-weight: 800;
@@ -33,16 +72,15 @@ body {
   letter-spacing: 0.08em;
   line-height: 0.95;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(233, 238, 244, 0.32);
+  -webkit-text-stroke: 1.5px var(--wordmark-stroke);
 }
 
 /* Subtle perspective grid / horizon behind the bike hero */
 .hero-grid {
   background:
-    radial-gradient(ellipse 75% 55% at 50% 42%, rgba(58, 160, 255, 0.1), transparent 65%),
-    linear-gradient(to bottom, transparent 54%, rgba(58, 160, 255, 0.05) 55%, transparent 56%),
-    repeating-linear-gradient(to right, rgba(139, 152, 166, 0.07) 0 1px, transparent 1px 64px),
-    repeating-linear-gradient(to bottom, rgba(139, 152, 166, 0.05) 0 1px, transparent 1px 48px);
+    radial-gradient(ellipse 75% 55% at 50% 42%, var(--hero-glow), transparent 65%),
+    repeating-linear-gradient(to right, var(--hero-line) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(to bottom, var(--hero-line) 0 1px, transparent 1px 48px);
   mask-image: radial-gradient(ellipse 90% 75% at 50% 45%, black 35%, transparent 78%);
 }
 
@@ -50,12 +88,19 @@ body {
   background: var(--color-panel);
   border: 1px solid var(--color-line);
   border-radius: 0.9rem;
+  box-shadow: var(--panel-shadow);
 }
 
 .tile-number {
   font-family: var(--font-display), sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+/* Placeholder silhouettes were tuned for dark backgrounds — darken them on
+   light so they don't wash out. Real transparent photos are never filtered. */
+html:not(.dark) img.bike-silhouette {
+  filter: brightness(0.55) saturate(0.9) contrast(1.05);
 }
 
 /* Map marker chips */
@@ -66,10 +111,14 @@ body {
   height: 26px;
   border-radius: 9999px;
   font: 700 13px/1 var(--font-body), system-ui, sans-serif;
-  color: #0a0d12;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
   cursor: pointer;
+}
+.dark .marker-chip {
+  color: #0a0d12;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
 .marker-wp { background: var(--color-accent); }
 .marker-fuel { background: var(--color-fuel); }

@@ -16,10 +16,16 @@ export const metadata: Metadata = {
     "Knows your bike: total trip cost with per-country fuel, motorcycle tolls and vignettes, plus range-based fuel stops and cadence-based rest stops.",
 };
 
+/** Runs before paint: stored theme wins, else prefers-color-scheme, else light. */
+const themeInit = `(function(){try{var t=localStorage.getItem("ridecost.theme");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";if(t==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${saira.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${inter.variable} ${saira.variable}`} suppressHydrationWarning>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        {children}
+      </body>
     </html>
   );
 }

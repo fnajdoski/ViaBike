@@ -8,6 +8,7 @@ import MapView from "@/components/MapView";
 import PlannerPanel from "@/components/PlannerPanel";
 import StatTiles from "@/components/StatTiles";
 import StopsList from "@/components/StopsList";
+import ThemeToggle from "@/components/ThemeToggle";
 import { getBike } from "@/data/bikes";
 import { effectiveConsumption } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
@@ -52,9 +53,12 @@ export default function Home() {
         <p className="wordmark-solid text-lg tracking-[0.2em]">
           RIDE<span className="text-accent">COST</span>
         </p>
-        <p className="text-[10px] uppercase tracking-[0.25em] text-mute">
-          Motorcycle trip cost & rest-stop planner
-        </p>
+        <span className="flex items-center gap-3">
+          <p className="hidden text-[10px] uppercase tracking-[0.25em] text-mute sm:block">
+            Motorcycle trip cost & rest-stop planner
+          </p>
+          <ThemeToggle />
+        </span>
       </header>
 
       {!bike ? (
