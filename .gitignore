@@ -11,3 +11,8 @@ npm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# Serwist-generated service worker (built by `next build`)
+public/sw.js
+public/sw.js.map
+public/swe-worker-*.js

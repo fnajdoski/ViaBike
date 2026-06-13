@@ -111,6 +111,29 @@ own assets (do not hotlink manufacturer press images).
 - **Tolls:** no schedule needed — set `TOLLGURU_API_KEY` and tolls are computed live
   per trip (motorcycle class) instead of the per-km estimate.
 
+## Installable app (PWA)
+
+RideCost is an installable PWA via [Serwist](https://serwist.pages.dev/) in
+*configurator mode* — the service worker is built by `@serwist/cli` after
+`next build` (`npm run build` runs both), so the app keeps building on
+Turbopack with no webpack config. The SW is disabled in development.
+
+- **Caching is data-safe:** all `/api/*` calls are `NetworkOnly` (fresh fuel
+  prices/routes/POIs, never stale); CARTO map tiles use StaleWhileRevalidate
+  with a capped cache; the app shell is precached; `/~offline` is the
+  navigation fallback.
+- **Install banner** ([components/InstallBanner.tsx](components/InstallBanner.tsx)):
+  Android/Chromium gets an Install button (`beforeinstallprompt`); iOS Safari
+  gets Add-to-Home-Screen instructions; hidden once installed or for 14 days
+  after a dismiss (per-device).
+- **Last session** is restored on load ([lib/session.ts](lib/session.ts)) —
+  bike, waypoints and settings, never an auto-plan; a compact last-result
+  summary shows "saved {date} — re-plan for current prices".
+- **Icons:** the set (192 / 512 / 512-maskable / 180 apple-touch) is generated
+  from one source mark by [scripts/generate-icons.mjs](scripts/generate-icons.mjs)
+  with `sharp`. To use your own brand icon, edit the SVG in that script (or drop
+  replacement PNGs at the same `public/` paths) and run `node scripts/generate-icons.mjs`.
+
 ## Roadmap (post-v1)
 
 - Live FX rates behind the same pattern as fuel prices.

@@ -3,6 +3,7 @@ import { getBike } from "@/data/bikes";
 import { rangeKm } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
 import { planTrip, type FuelPricesResponse, type TollGuruResult } from "@/lib/planTrip";
+import type { SessionInputs } from "@/lib/session";
 import type { ExtraCost, PlannedStop, RouteData, Waypoint } from "@/lib/types";
 
 export type SavedTrip = {
@@ -57,6 +58,7 @@ type RideCostState = {
   addExtra: (label: string, amountEur: number) => void;
   removeExtra: (id: string) => void;
   loadDemo: () => void;
+  hydrateInputs: (inputs: SessionInputs) => void;
   plan: () => Promise<void>;
 
   listTrips: () => SavedTrip[];
@@ -154,6 +156,21 @@ export const useRideCost = create<RideCostState>((set, get) => ({
         { id: uid(), name: "Milano, Italy", lonLat: [9.19, 45.4642] },
         { id: uid(), name: "Zürich, Switzerland", lonLat: [8.5417, 47.3769] },
       ],
+      ...emptyResults,
+    }),
+
+  // Restore persisted planning inputs on load. Never auto-runs a plan —
+  // results stay empty until the user taps Plan Trip. A saved bike that no
+  // longer exists falls back to the picker.
+  hydrateInputs: (inputs) =>
+    set({
+      bikeId: inputs.bikeId && getBike(inputs.bikeId) ? inputs.bikeId : null,
+      loaded: inputs.loaded,
+      waypoints: inputs.waypoints,
+      restMode: inputs.restMode,
+      restKm: inputs.restKm,
+      restHours: inputs.restHours,
+      extras: inputs.extras,
       ...emptyResults,
     }),
 

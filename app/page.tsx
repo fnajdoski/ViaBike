@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import BikeHero from "@/components/BikeHero";
 import BikePicker from "@/components/BikePicker";
 import CostPanel from "@/components/CostPanel";
@@ -13,6 +13,7 @@ import { getBike } from "@/data/bikes";
 import { effectiveConsumption } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
 import { buildCostBreakdown } from "@/lib/cost";
+import { saveResult } from "@/lib/session";
 import { useRideCost } from "@/state/store";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
   const prices = useRideCost((s) => s.prices);
   const tollguru = useRideCost((s) => s.tollguru);
   const extras = useRideCost((s) => s.extras);
+  const status = useRideCost((s) => s.status);
 
   const bike = bikeId ? getBike(bikeId) : undefined;
 
@@ -46,6 +48,19 @@ export default function Home() {
       extras,
     });
   }, [bike, route, loaded, prices, tollguru, extras]);
+
+  // Cache a compact, geometry-free summary of the last computed plan so a
+  // returning user sees "last plan saved …" instead of a blank slate.
+  useEffect(() => {
+    if (status === "done" && breakdown && route) {
+      saveResult({
+        savedAt: new Date().toISOString(),
+        totalEur: breakdown.totalEur,
+        distanceKm: route.distanceKm,
+        bikeId,
+      });
+    }
+  }, [status, breakdown, route, bikeId]);
 
   return (
     <div className="min-h-screen pb-16">

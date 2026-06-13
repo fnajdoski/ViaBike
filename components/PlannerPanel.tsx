@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRideCost } from "@/state/store";
+import { loadResult, type LastResultSummary } from "@/lib/session";
 import type { Waypoint } from "@/lib/types";
 import SavedTrips from "./SavedTrips";
 
@@ -92,6 +93,11 @@ export default function PlannerPanel() {
   const error = useRideCost((s) => s.error);
   const { addWaypoint, setRestMode, setRestKm, setRestHours, plan, loadDemo } = useRideCost.getState();
 
+  // Surface the cached last-plan summary (geometry-free) so a restored session
+  // isn't a blank slate; staleness is explicit and a tap re-plans for current prices.
+  const [lastResult, setLastResult] = useState<LastResultSummary | null>(null);
+  useEffect(() => setLastResult(loadResult()), []);
+
   return (
     <div className="panel flex flex-col gap-5 p-5">
       <div>
@@ -173,6 +179,22 @@ export default function PlannerPanel() {
       </div>
 
       <div>
+        {lastResult && status === "idle" && (
+          <div className="mb-2 flex items-center justify-between gap-2 rounded-md border border-line bg-panel2 px-3 py-2 text-[11px] text-mute">
+            <span>
+              Last plan saved {new Date(lastResult.savedAt).toLocaleDateString()}
+              {lastResult.totalEur != null && ` · ~€${Math.round(lastResult.totalEur)}`}
+              {lastResult.distanceKm != null && ` · ${Math.round(lastResult.distanceKm)} km`}
+              <span className="block text-[10px]">re-plan for current prices</span>
+            </span>
+            <button
+              onClick={plan}
+              className="shrink-0 cursor-pointer rounded-md border border-accent px-2.5 py-1 text-[10px] font-semibold text-accent transition hover:bg-accent hover:text-night"
+            >
+              Re-plan
+            </button>
+          </div>
+        )}
         <button
           onClick={plan}
           disabled={status === "planning"}

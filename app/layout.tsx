@@ -1,7 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Saira_Condensed } from "next/font/google";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
+import InstallBanner from "@/components/InstallBanner";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import SessionManager from "@/components/SessionManager";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
 const saira = Saira_Condensed({
@@ -14,6 +17,17 @@ export const metadata: Metadata = {
   title: "RideCost — motorcycle trip cost & rest-stop planner",
   description:
     "Knows your bike: total trip cost with per-country fuel, motorcycle tolls and vignettes, plus range-based fuel stops and cadence-based rest stops.",
+  applicationName: "RideCost",
+  appleWebApp: { capable: true, title: "RideCost", statusBarStyle: "default" },
+  icons: { apple: "/apple-touch-icon.png" },
+};
+
+export const viewport: Viewport = {
+  // match the light/dark token backgrounds so the browser/OS chrome blends in
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#edeff2" },
+    { media: "(prefers-color-scheme: dark)", color: "#07090d" },
+  ],
 };
 
 /** Runs before paint: stored theme wins, else prefers-color-scheme, else light. */
@@ -24,7 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${saira.variable}`} suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        <SessionManager />
         {children}
+        <InstallBanner />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
