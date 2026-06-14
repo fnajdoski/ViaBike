@@ -3,8 +3,8 @@
 import { getBike } from "@/data/bikes";
 import { effectiveConsumption, rangeKm, usableTankLiters } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
-import { fmtDuration } from "@/lib/format";
 import type { CostBreakdown } from "@/lib/types";
+import { useFormat, useT } from "@/state/locale";
 import { useRideCost } from "@/state/store";
 
 function Tile(props: { label: string; value: string; unit?: string; accent?: string; sub?: string }) {
@@ -29,43 +29,50 @@ export default function StatTiles({ breakdown }: { breakdown: CostBreakdown | nu
   const loaded = useRideCost((s) => s.loaded);
   const route = useRideCost((s) => s.route);
   const bike = bikeId ? getBike(bikeId) : undefined;
+  const t = useT();
+  const fmt = useFormat();
   if (!bike) return null;
 
   const lf = loaded ? LOAD_FACTOR_LOADED : LOAD_FACTOR_SOLO;
 
   return (
     <section className="mx-auto grid max-w-5xl grid-cols-2 gap-3 px-6 sm:grid-cols-3 lg:grid-cols-6">
-      <Tile label="Tank" value={bike.tankLiters.toString()} unit="L" sub={`${usableTankLiters(bike).toFixed(1)} L usable (90%)`} />
       <Tile
-        label="Consumption"
+        label={t("stat.tank")}
+        value={fmt.num(bike.tankLiters)}
+        unit={t("unit.l")}
+        sub={t("stat.tankSub", { liters: usableTankLiters(bike).toFixed(1) })}
+      />
+      <Tile
+        label={t("stat.consumption")}
         value={effectiveConsumption(bike, lf).toFixed(2)}
-        unit="L/100km"
-        sub={loaded ? "loaded +10%" : "solo"}
+        unit={t("unit.lper100")}
+        sub={loaded ? t("stat.consLoaded") : t("stat.consSolo")}
       />
       <Tile
-        label="Range"
-        value={Math.round(rangeKm(bike, lf)).toString()}
-        unit="km"
+        label={t("stat.range")}
+        value={fmt.num(Math.round(rangeKm(bike, lf)))}
+        unit={t("unit.km")}
         accent="var(--color-good)"
-        sub="on usable tank"
+        sub={t("stat.rangeSub")}
       />
       <Tile
-        label="Distance"
-        value={route ? Math.round(route.distanceKm).toLocaleString("en-US") : "—"}
-        unit={route ? "km" : undefined}
+        label={t("stat.distance")}
+        value={route ? fmt.num(Math.round(route.distanceKm)) : "—"}
+        unit={route ? t("unit.km") : undefined}
         accent="var(--color-accent)"
       />
       <Tile
-        label="Est. time"
-        value={route ? fmtDuration(route.durationMin) : "—"}
+        label={t("stat.estTime")}
+        value={route ? fmt.duration(route.durationMin) : "—"}
         accent="var(--color-accent)"
-        sub={route ? "riding time, no stops" : undefined}
+        sub={route ? t("stat.timeSub") : undefined}
       />
       <Tile
-        label="Est. cost"
-        value={breakdown ? `€${Math.round(breakdown.totalEur)}` : "—"}
+        label={t("stat.estCost")}
+        value={breakdown ? fmt.eur(Math.round(breakdown.totalEur)) : "—"}
         accent="var(--color-fuel)"
-        sub={breakdown ? "estimate — see breakdown" : undefined}
+        sub={breakdown ? t("stat.costSub") : undefined}
       />
     </section>
   );

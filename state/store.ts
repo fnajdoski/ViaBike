@@ -4,7 +4,7 @@ import { rangeKm } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
 import { planTrip, type FuelPricesResponse, type TollGuruResult } from "@/lib/planTrip";
 import type { SessionInputs } from "@/lib/session";
-import type { ExtraCost, PlannedStop, RouteData, Waypoint } from "@/lib/types";
+import type { ExtraCost, PlannedStop, RestMode, RouteData, Waypoint } from "@/lib/types";
 
 export type SavedTrip = {
   name: string;
@@ -12,7 +12,7 @@ export type SavedTrip = {
   bikeId: string | null;
   loaded: boolean;
   waypoints: Waypoint[];
-  restMode: "distance" | "time";
+  restMode: RestMode;
   restKm: number;
   restHours: number;
   extras: ExtraCost[];
@@ -29,7 +29,7 @@ type RideCostState = {
   bikeId: string | null;
   loaded: boolean;
   waypoints: Waypoint[];
-  restMode: "distance" | "time";
+  restMode: RestMode;
   restKm: number;
   restHours: number;
   extras: ExtraCost[];
@@ -52,7 +52,7 @@ type RideCostState = {
   updateWaypoint: (id: string, patch: Partial<Waypoint>) => void;
   removeWaypoint: (id: string) => void;
   moveWaypoint: (id: string, dir: -1 | 1) => void;
-  setRestMode: (mode: "distance" | "time") => void;
+  setRestMode: (mode: RestMode) => void;
   setRestKm: (km: number) => void;
   setRestHours: (h: number) => void;
   addExtra: (label: string, amountEur: number) => void;
@@ -178,15 +178,15 @@ export const useRideCost = create<RideCostState>((set, get) => ({
     const s = get();
     const bike = s.bikeId ? getBike(s.bikeId) : undefined;
     if (!bike) {
-      set({ status: "error", error: "Pick a bike first." });
+      set({ status: "error", error: "error.noBike" });
       return;
     }
     const coords = s.waypoints.filter((w) => w.lonLat).map((w) => w.lonLat!);
     if (coords.length < 2) {
-      set({ status: "error", error: "Set at least a start and a destination (search or click the map)." });
+      set({ status: "error", error: "error.needTwoPoints" });
       return;
     }
-    set({ status: "planning", planStep: "Starting…", error: undefined, warnings: [] });
+    set({ status: "planning", planStep: "planStep.starting", error: undefined, warnings: [] });
     try {
       const loadFactor = s.loaded ? LOAD_FACTOR_LOADED : LOAD_FACTOR_SOLO;
       const result = await planTrip({

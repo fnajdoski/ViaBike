@@ -83,5 +83,8 @@ export const FUEL_PRICES_AS_OF = `${(priceData as FuelPricesJson)._lastUpdated ?
 export const FUEL_PRICES_SOURCE =
   (priceData as FuelPricesJson)._source ?? "builtin fallback table";
 
+/** Raw last-refreshed date (YYYY-MM-DD) for offline / freshness display. */
+export const FUEL_PRICES_UPDATED = (priceData as FuelPricesJson)._lastUpdated ?? "2026-06";
+
 /** Average used when a country is missing from both the feed and the table. */
 export const FUEL_PRICE_DEFAULT_EUR = 1.65;

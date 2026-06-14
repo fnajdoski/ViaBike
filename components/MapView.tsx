@@ -2,7 +2,8 @@
 
 import maplibregl from "maplibre-gl";
 import { useEffect, useRef } from "react";
-import { fmtKm } from "@/lib/format";
+import type { MessageKey } from "@/lib/i18n/en";
+import { useFormat, useT } from "@/state/locale";
 import { useRideCost } from "@/state/store";
 import { useTheme, type Theme } from "@/state/theme";
 
@@ -56,6 +57,8 @@ export default function MapView() {
   const restStops = useRideCost((s) => s.restStops);
   const route = useRideCost((s) => s.route);
   const theme = useTheme((s) => s.theme);
+  const t = useT();
+  const fmt = useFormat();
 
   // init per theme — tiles + line colors are baked into the style, so the
   // simplest correct theme swap is a rebuild (markers/route re-sync on load)
@@ -162,13 +165,14 @@ export default function MapView() {
     });
 
     for (const stop of fuelStops) {
+      const name = stop.poi?.name ?? t("stops.fuelTitle");
       const popup = new maplibregl.Popup({ offset: 14 }).setText(
-        `⛽ ${stop.poi?.name ?? "Fuel stop"} — km ${Math.round(stop.atKm)}` +
-          (stop.poi ? ` (${stop.poi.offRouteKm.toFixed(1)} km off route)` : "") +
-          (stop.note ? ` · ${stop.note}` : ""),
+        `⛽ ${name} — ${t("stops.km", { km: Math.round(stop.atKm) })}` +
+          (stop.poi ? ` (${t("stops.detour", { km: stop.poi.offRouteKm.toFixed(1) })})` : "") +
+          (stop.noteKey ? ` · ${t(stop.noteKey as MessageKey)}` : ""),
       );
       const marker = new maplibregl.Marker({
-        element: chip("marker-fuel", stop.status === "none" ? "?" : "⛽", `Fuel · ${fmtKm(stop.atKm)}`),
+        element: chip("marker-fuel", stop.status === "none" ? "?" : "⛽", `⛽ ${fmt.km(stop.atKm)}`),
       })
         .setLngLat(stop.point)
         .setPopup(popup)
@@ -178,11 +182,13 @@ export default function MapView() {
 
     for (const stop of restStops) {
       if (stop.combinedWithFuel) continue; // the fuel marker already covers it
+      const name = stop.poi?.name ?? t("stops.restTitle");
       const popup = new maplibregl.Popup({ offset: 12 }).setText(
-        `☕ ${stop.poi?.name ?? "Rest stop"} — km ${Math.round(stop.atKm)}` + (stop.note ? ` · ${stop.note}` : ""),
+        `☕ ${name} — ${t("stops.km", { km: Math.round(stop.atKm) })}` +
+          (stop.noteKey ? ` · ${t(stop.noteKey as MessageKey)}` : ""),
       );
       const marker = new maplibregl.Marker({
-        element: chip("marker-rest", stop.status === "none" ? "?" : "☕", `Rest · ${fmtKm(stop.atKm)}`),
+        element: chip("marker-rest", stop.status === "none" ? "?" : "☕", `☕ ${fmt.km(stop.atKm)}`),
       })
         .setLngLat(stop.point)
         .setPopup(popup)
@@ -194,7 +200,7 @@ export default function MapView() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(syncRoute, [route]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(syncMarkers, [waypoints, fuelStops, restStops]);
+  useEffect(syncMarkers, [waypoints, fuelStops, restStops, t, fmt]);
 
   return (
     // mobile keeps a fixed height; at lg the panel stretches to the grid row
@@ -202,7 +208,7 @@ export default function MapView() {
     <div className="panel relative h-[460px] overflow-hidden lg:h-full">
       <div ref={containerRef} className="h-full w-full" />
       <p className="text-mute absolute bottom-2 left-2 z-10 rounded bg-night/70 px-2 py-1 text-[10px]">
-        Click the map to drop waypoints · drag markers to adjust
+        {t("map.hint")}
       </p>
     </div>
   );

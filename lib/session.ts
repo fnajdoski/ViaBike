@@ -6,7 +6,7 @@
  * null so the app falls back to a clean start. Pure (serialize/parse) helpers
  * are unit-tested; the storage wrappers just guard `window` + try/catch.
  */
-import type { ExtraCost, Waypoint } from "./types";
+import type { ExtraCost, RestMode, Waypoint } from "./types";
 
 export const SESSION_KEY = "ridecost:lastSession";
 export const RESULT_KEY = "ridecost:lastResult";
@@ -16,7 +16,7 @@ export type SessionInputs = {
   bikeId: string | null;
   loaded: boolean;
   waypoints: Waypoint[];
-  restMode: "distance" | "time";
+  restMode: RestMode;
   restKm: number;
   restHours: number;
   extras: ExtraCost[];
@@ -41,7 +41,7 @@ export function parseSession(raw: string | null | undefined): SessionInputs | nu
   try {
     const data = JSON.parse(raw) as Partial<Stored<SessionInputs>>;
     if (!data || data.version !== SESSION_VERSION) return null;
-    if (data.restMode !== "distance" && data.restMode !== "time") return null;
+    if (data.restMode !== "distance" && data.restMode !== "time" && data.restMode !== "none") return null;
     if (!Array.isArray(data.waypoints)) return null;
 
     const waypoints: Waypoint[] = data.waypoints

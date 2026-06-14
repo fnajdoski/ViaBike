@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { countryAtPoint, splitByCountry } from "@/lib/countries";
 import { cumulativeKm, sampleEveryKm } from "@/lib/geo";
+import { tollwaySegments, type TollwayValue } from "@/lib/tolls";
 import type { LonLat, RouteData, RouteLeg } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ type OrsGeoJson = {
     properties: {
       summary: { distance: number; duration: number };
       segments: { distance: number; duration: number }[];
+      extras?: { tollways?: { values: TollwayValue[] } };
     };
   }[];
 };
@@ -32,7 +34,8 @@ async function routeViaOrs(coordinates: LonLat[], key: string) {
   const res = await fetch("https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
     method: "POST",
     headers: { Authorization: key, "Content-Type": "application/json" },
-    body: JSON.stringify({ coordinates }),
+    // tollways extra lets us charge only roads that are actually tolled
+    body: JSON.stringify({ coordinates, extra_info: ["tollways"] }),
   });
   if (!res.ok) throw new Error(`ORS ${res.status}: ${(await res.text()).slice(0, 300)}`);
   const data = (await res.json()) as OrsGeoJson;
@@ -45,6 +48,7 @@ async function routeViaOrs(coordinates: LonLat[], key: string) {
     legs: feat.properties.segments.map(
       (s): RouteLeg => ({ distanceKm: s.distance / 1000, durationMin: s.duration / 60 }),
     ),
+    tollwayValues: feat.properties.extras?.tollways?.values ?? [],
     source: "ors" as const,
   };
 }
@@ -64,6 +68,9 @@ async function routeViaOsrmDemo(coordinates: LonLat[]) {
     legs: route.legs.map(
       (l): RouteLeg => ({ distanceKm: l.distance / 1000, durationMin: l.duration / 60 }),
     ),
+    // OSRM doesn't expose tollway info → no per-km tolls inferred (better than
+    // inventing them); a TollGuru key gives exact plaza pricing instead.
+    tollwayValues: [] as TollwayValue[],
     source: "osrm-demo" as const,
   };
 }
@@ -110,6 +117,12 @@ export async function POST(req: Request) {
     iso2: countryAtPoint(s.point),
   }));
 
-  const payload: RouteData = { ...base, countrySegments: splitByCountry(samples) };
+  const { tollwayValues, ...routeBase } = base;
+  const payload: RouteData = {
+    ...routeBase,
+    countrySegments: splitByCountry(samples),
+    // only ACTUAL tollway distance per country — toll-free routes → empty → €0
+    tollwaySegments: tollwaySegments(base.coordinates, tollwayValues, countryAtPoint),
+  };
   return NextResponse.json(payload);
 }

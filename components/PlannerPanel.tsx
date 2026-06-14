@@ -3,12 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useRideCost } from "@/state/store";
 import { debounce, shouldQuery, type Suggestion } from "@/lib/autocomplete";
+import type { MessageKey } from "@/lib/i18n/en";
 import { loadResult, type LastResultSummary } from "@/lib/session";
+import { useOnline } from "@/lib/useOnline";
 import type { Waypoint } from "@/lib/types";
+import { useFormat, useT } from "@/state/locale";
 import SavedTrips from "./SavedTrips";
 
 function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count: number }) {
   const { updateWaypoint, removeWaypoint, moveWaypoint } = useRideCost.getState();
+  const t = useT();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
@@ -101,13 +105,13 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
           role="combobox"
           aria-expanded={open}
           aria-autocomplete="list"
-          placeholder={index === 0 ? "Start — type a place…" : index === count - 1 ? "Destination" : "Via"}
+          placeholder={index === 0 ? t("planner.start") : index === count - 1 ? t("planner.destination") : t("planner.via")}
           className="w-full rounded-md border border-line bg-panel2 px-3 py-2 text-sm outline-none placeholder:text-mute focus:border-accent"
         />
         <button
           onClick={manualSearch}
           disabled={loading}
-          title="Search place"
+          title={t("planner.searchPlace")}
           className="cursor-pointer rounded-md border border-line bg-panel2 px-2.5 py-2 text-sm text-mute transition hover:text-ink disabled:opacity-50"
         >
           {loading ? "…" : "🔍"}
@@ -145,7 +149,7 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
       )}
       {open && !loading && suggestions.length === 0 && shouldQuery(wp.name) && (
         <ul className="panel absolute inset-x-10 z-30 mt-1 text-xs shadow-xl">
-          <li className="px-3 py-2 text-mute">No matches</li>
+          <li className="px-3 py-2 text-mute">{t("planner.noMatches")}</li>
         </ul>
       )}
     </div>
@@ -164,6 +168,9 @@ export default function PlannerPanel() {
   const planStep = useRideCost((s) => s.planStep);
   const error = useRideCost((s) => s.error);
   const { addWaypoint, setRestMode, setRestKm, setRestHours, plan, loadDemo } = useRideCost.getState();
+  const t = useT();
+  const fmt = useFormat();
+  const online = useOnline();
 
   // Surface the cached last-plan summary (geometry-free) so a restored session
   // isn't a blank slate; staleness is explicit and a tap re-plans for current prices.
@@ -173,10 +180,10 @@ export default function PlannerPanel() {
   return (
     <div className="panel flex flex-col gap-5 p-5">
       <div>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-mute">Route</h2>
-          <button onClick={loadDemo} className="cursor-pointer text-xs text-accent hover:underline">
-            Load demo: Skopje → Milano → Zürich
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-mute">{t("planner.route")}</h2>
+          <button onClick={loadDemo} className="cursor-pointer text-right text-xs text-accent hover:underline">
+            {t("planner.loadDemo")}
           </button>
         </div>
         <div className="flex flex-col gap-2">
@@ -185,68 +192,72 @@ export default function PlannerPanel() {
           ))}
         </div>
         <button onClick={() => addWaypoint()} className="mt-2 cursor-pointer text-xs text-accent hover:underline">
-          + Add waypoint
+          {t("planner.addWaypoint")}
         </button>
       </div>
 
       <div>
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-mute">Rest stops</h2>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-mute">{t("planner.restStops")}</h2>
         <div className="panel inline-flex overflow-hidden rounded-full p-0.5 text-xs">
           <button
             onClick={() => setRestMode("distance")}
-            className={`cursor-pointer rounded-full px-4 py-1.5 transition ${restMode === "distance" ? "bg-rest font-semibold text-night" : "text-mute hover:text-ink"}`}
+            className={`cursor-pointer rounded-full px-3 py-1.5 transition ${restMode === "distance" ? "bg-rest font-semibold text-night" : "text-mute hover:text-ink"}`}
           >
-            By distance
+            {t("planner.byDistance")}
           </button>
           <button
             onClick={() => setRestMode("time")}
-            className={`cursor-pointer rounded-full px-4 py-1.5 transition ${restMode === "time" ? "bg-rest font-semibold text-night" : "text-mute hover:text-ink"}`}
+            className={`cursor-pointer rounded-full px-3 py-1.5 transition ${restMode === "time" ? "bg-rest font-semibold text-night" : "text-mute hover:text-ink"}`}
           >
-            By time
+            {t("planner.byTime")}
+          </button>
+          <button
+            onClick={() => setRestMode("none")}
+            className={`cursor-pointer rounded-full px-3 py-1.5 transition ${restMode === "none" ? "bg-rest font-semibold text-night" : "text-mute hover:text-ink"}`}
+          >
+            {t("planner.noStops")}
           </button>
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          {restMode === "distance" ? (
-            <>
-              {REST_KM_PRESETS.map((km) => (
-                <button
-                  key={km}
-                  onClick={() => setRestKm(km)}
-                  className={`cursor-pointer rounded-md border px-3 py-1.5 text-xs transition ${restKm === km ? "border-rest text-rest" : "border-line text-mute hover:text-ink"}`}
-                >
-                  {km} km
-                </button>
-              ))}
-              <label className="ml-1 flex items-center gap-1.5 text-xs text-mute">
-                custom
-                <input
-                  type="number"
-                  min={30}
-                  value={restKm}
-                  onChange={(e) => setRestKm(Math.max(30, Number(e.target.value) || 150))}
-                  className="w-20 rounded-md border border-line bg-panel2 px-2 py-1.5 outline-none focus:border-rest"
-                />
-                km
-              </label>
-            </>
-          ) : (
-            <>
-              {REST_H_PRESETS.map((h) => (
+        {restMode !== "none" && (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {restMode === "distance" ? (
+              <>
+                {REST_KM_PRESETS.map((km) => (
+                  <button
+                    key={km}
+                    onClick={() => setRestKm(km)}
+                    className={`cursor-pointer rounded-md border px-3 py-1.5 text-xs transition ${restKm === km ? "border-rest text-rest" : "border-line text-mute hover:text-ink"}`}
+                  >
+                    {fmt.num(km)} {t("unit.km")}
+                  </button>
+                ))}
+                <label className="ml-1 flex items-center gap-1.5 text-xs text-mute">
+                  {t("planner.custom")}
+                  <input
+                    type="number"
+                    min={30}
+                    value={restKm}
+                    onChange={(e) => setRestKm(Math.max(30, Number(e.target.value) || 150))}
+                    className="w-20 rounded-md border border-line bg-panel2 px-2 py-1.5 outline-none focus:border-rest"
+                  />
+                  {t("unit.km")}
+                </label>
+              </>
+            ) : (
+              REST_H_PRESETS.map((h) => (
                 <button
                   key={h}
                   onClick={() => setRestHours(h)}
                   className={`cursor-pointer rounded-md border px-3 py-1.5 text-xs transition ${restHours === h ? "border-rest text-rest" : "border-line text-mute hover:text-ink"}`}
                 >
-                  {h} h
+                  {fmt.num(h)} h
                 </button>
-              ))}
-              <span className="text-[10px] text-mute">converted to km via the route's average speed</span>
-            </>
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        )}
         <p className="mt-2 text-[10px] text-mute">
-          Stops are only recommended within ≤ 2 km of the route — no far deroutings. Fuel stops are
-          planned separately from your range (refuel at 85%).
+          {restMode === "none" ? t("planner.noStopsNote") : t("planner.restNote")}
         </p>
       </div>
 
@@ -254,32 +265,36 @@ export default function PlannerPanel() {
         {lastResult && status === "idle" && (
           <div className="mb-2 flex items-center justify-between gap-2 rounded-md border border-line bg-panel2 px-3 py-2 text-[11px] text-mute">
             <span>
-              Last plan saved {new Date(lastResult.savedAt).toLocaleDateString()}
-              {lastResult.totalEur != null && ` · ~€${Math.round(lastResult.totalEur)}`}
-              {lastResult.distanceKm != null && ` · ${Math.round(lastResult.distanceKm)} km`}
-              <span className="block text-[10px]">re-plan for current prices</span>
+              {t("planner.lastSaved", { date: fmt.date(lastResult.savedAt) })}
+              {lastResult.totalEur != null && ` · ~${fmt.eur(Math.round(lastResult.totalEur))}`}
+              {lastResult.distanceKm != null && ` · ${fmt.km(Math.round(lastResult.distanceKm))}`}
+              <span className="block text-[10px]">{t("planner.lastSavedSub")}</span>
             </span>
             <button
               onClick={plan}
-              className="shrink-0 cursor-pointer rounded-md border border-accent px-2.5 py-1 text-[10px] font-semibold text-accent transition hover:bg-accent hover:text-night"
+              disabled={!online}
+              className="shrink-0 cursor-pointer rounded-md border border-accent px-2.5 py-1 text-[10px] font-semibold text-accent transition hover:bg-accent hover:text-night disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Re-plan
+              {t("planner.replan")}
             </button>
           </div>
         )}
         <button
           onClick={plan}
-          disabled={status === "planning"}
-          className="w-full cursor-pointer rounded-lg bg-accent py-3 text-sm font-bold uppercase tracking-[0.15em] text-night transition hover:brightness-110 disabled:opacity-60"
+          disabled={status === "planning" || !online}
+          className="w-full cursor-pointer rounded-lg bg-accent py-3 text-sm font-bold uppercase tracking-[0.15em] text-night transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "planning" ? "Planning…" : "Plan trip"}
+          {status === "planning" ? t("planner.planning") : t("planner.planTrip")}
         </button>
         {status === "planning" && (
           <p className="mt-2 animate-pulse text-center text-xs text-mute">
-            {planStep ?? "Planning…"}
+            {t((planStep ?? "planStep.starting") as MessageKey)}
           </p>
         )}
-        {error && <p className="mt-2 text-xs text-warn">{error}</p>}
+        {!online && status !== "planning" && (
+          <p className="mt-2 text-center text-xs text-warn">{t("planner.offlineDisabled")}</p>
+        )}
+        {error && <p className="mt-2 text-xs text-warn">{t(error as MessageKey)}</p>}
       </div>
 
       <SavedTrips />

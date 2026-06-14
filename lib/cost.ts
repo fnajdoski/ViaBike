@@ -98,13 +98,16 @@ export function vignetteItems(segments: CountrySegment[]): VignetteItem[] {
 
 export function buildCostBreakdown(args: {
   segments: CountrySegment[];
+  /** Tollway-only distance per country (from ORS). Empty → €0 estimated tolls. */
+  tollSegments?: CountrySegment[];
   effectiveLper100: number;
   prices?: Record<string, number>;
   tollsOverride?: { tolls: TollCountryCost[]; source: "tollguru" } | null;
   extras?: ExtraCost[];
 }): CostBreakdown {
   const fuel = fuelBreakdown(args.segments, args.effectiveLper100, args.prices);
-  const tolls = args.tollsOverride?.tolls ?? tollEstimate(args.segments);
+  // tolls are charged only on actual tollway distance — never blanket per-km
+  const tolls = args.tollsOverride?.tolls ?? tollEstimate(args.tollSegments ?? []);
   const vigs = vignetteItems(args.segments);
   const fuelTotalEur = fuel.reduce((a, f) => a + f.costEur, 0);
   const tollsTotalEur = tolls.reduce((a, t) => a + t.costEur, 0);

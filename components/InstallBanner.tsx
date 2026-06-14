@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/state/locale";
 
 const DISMISS_KEY = "ridecost:install-dismissed";
 const DISMISS_DAYS = 14;
@@ -39,6 +40,7 @@ function isIosSafari(): boolean {
 }
 
 export default function InstallBanner() {
+  const t = useT();
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [iosHint, setIosHint] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -103,7 +105,7 @@ export default function InstallBanner() {
     <div
       className="fixed inset-x-0 bottom-0 z-[60] flex justify-center px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] motion-safe:animate-[slideUp_.28s_ease-out]"
       role="dialog"
-      aria-label="Install RideCost"
+      aria-label={t("install.title")}
     >
       <style>{`@keyframes slideUp{from{transform:translateY(110%)}to{transform:translateY(0)}}`}</style>
       <div className="panel flex w-full max-w-md items-center gap-3 px-4 py-2.5">
@@ -111,15 +113,11 @@ export default function InstallBanner() {
           🏍️
         </span>
         {iosHint ? (
-          <p className="min-w-0 flex-1 text-xs leading-snug text-ink">
-            Add <span className="font-semibold">RideCost</span> to your Home Screen — tap the Share
-            icon <span aria-hidden>􀈂</span> <span className="text-mute">↑</span>, then{" "}
-            <span className="font-semibold">&ldquo;Add to Home Screen&rdquo;</span>.
-          </p>
+          <p className="min-w-0 flex-1 text-xs leading-snug text-ink">{t("install.ios")}</p>
         ) : (
           <p className="min-w-0 flex-1 text-xs leading-snug text-ink">
-            <span className="font-semibold">Install RideCost</span>
-            <span className="block text-mute">Add it to your device for full-screen, one-tap access.</span>
+            <span className="font-semibold">{t("install.title")}</span>
+            <span className="block text-mute">{t("install.subtitle")}</span>
           </p>
         )}
         {!iosHint && (
@@ -127,12 +125,12 @@ export default function InstallBanner() {
             onClick={install}
             className="shrink-0 cursor-pointer rounded-lg bg-accent px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide text-night transition hover:brightness-110"
           >
-            Install
+            {t("install.button")}
           </button>
         )}
         <button
           onClick={dismiss}
-          aria-label="Dismiss"
+          aria-label={t("install.dismiss")}
           className="shrink-0 cursor-pointer rounded-md px-1.5 text-mute transition hover:text-ink"
         >
           ✕

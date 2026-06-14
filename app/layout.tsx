@@ -6,7 +6,10 @@ import InstallBanner from "@/components/InstallBanner";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import SessionManager from "@/components/SessionManager";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
+// Inter carries Cyrillic so Macedonian body text renders cleanly. Saira
+// Condensed is Latin-only (display/wordmark); translated display headings fall
+// back per-glyph to Inter via the font stack in globals.css.
+const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-body" });
 const saira = Saira_Condensed({
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],

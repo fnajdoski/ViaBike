@@ -95,7 +95,7 @@ export function planFuelStops(
     }
 
     let status: PlannedStop["status"] = "found";
-    let note: string | undefined;
+    let noteKey: string | undefined;
 
     // 2) fall back to the nearest station BEFORE the target
     if (!chosen) {
@@ -105,7 +105,7 @@ export function planFuelStops(
       }
       if (chosen) {
         status = "fallback-early";
-        note = "No station near the ideal point — stopping earlier (better early than stranded).";
+        noteKey = "stopNote.fuelFallbackEarly";
       }
     }
 
@@ -117,7 +117,7 @@ export function planFuelStops(
         point: [chosen.lon, chosen.lat],
         poi: chosen,
         status,
-        note,
+        noteKey,
       });
       lastFuelKm = chosen.routeKm;
     } else {
@@ -127,7 +127,7 @@ export function planFuelStops(
         atKm: targetKm,
         point: pointAtKm(coords, cum, targetKm),
         status: "none",
-        note: "No station found within the detour limit — plan this refuel manually.",
+        noteKey: "stopNote.fuelNone",
       });
       lastFuelKm = targetKm;
     }
@@ -168,7 +168,7 @@ export function planRestStops(
         poi: nearbyFuel.poi,
         status: "found",
         combinedWithFuel: true,
-        note: "Combined with the fuel stop here.",
+        noteKey: "stopNote.restCombined",
       };
     }
 
@@ -201,7 +201,7 @@ export function planRestStops(
       atKm: targetKm,
       point: pointAtKm(coords, cum, targetKm),
       status: "none",
-      note: "No rest POI found within the detour limit around this point.",
+      noteKey: "stopNote.restNone",
     };
   });
 }

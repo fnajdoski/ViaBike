@@ -1,7 +1,7 @@
 import { REST_WINDOW_KM } from "./constants";
 import { cumulativeKm, nearestOnRoute, pointAtKm, sampleEveryKm } from "./geo";
 import { planFuelStops, planFuelTargets, planRestStops, planRestTargets, timeCadenceToKm } from "./stops";
-import type { LonLat, PlannedStop, PoiKind, RouteData, RoutePoi } from "./types";
+import type { LonLat, PlannedStop, PoiKind, RestMode, RouteData, RoutePoi } from "./types";
 
 export type FuelPricesResponse = {
   source: string;
@@ -70,27 +70,31 @@ function corridorPoints(
 export async function planTrip(args: {
   coords: LonLat[];
   rangeKm: number;
-  restMode: "distance" | "time";
+  restMode: RestMode;
   restKm: number;
   restHours: number;
   onProgress?: (step: string) => void;
 }): Promise<PlanResult> {
   const progress = args.onProgress ?? (() => {});
   const warnings: string[] = [];
-  progress("Routing…");
+  progress("planStep.routing");
   const route = await postJson<RouteData>("/api/route", { coordinates: args.coords });
   if (route.source === "osrm-demo") {
-    warnings.push("Routing used the public OSRM demo server (no ORS key) — fine for planning, but rate-limited.");
+    warnings.push("warn.demoRouting");
   }
 
   const coords = route.coordinates;
   const cum = cumulativeKm(coords);
   const totalKm = cum[cum.length - 1];
 
+  // "none" → 0 interval; planRestTargets/planRestStops then yield no rest stops
+  // (fuel stops are computed independently from range, below).
   const restIntervalKm =
-    args.restMode === "time"
-      ? timeCadenceToKm(args.restHours, route.distanceKm, route.durationMin)
-      : args.restKm;
+    args.restMode === "none"
+      ? 0
+      : args.restMode === "time"
+        ? timeCadenceToKm(args.restHours, route.distanceKm, route.durationMin)
+        : args.restKm;
 
   // One corridor along the whole route for fuel stations, plus a small
   // corridor around each rest target for cafés / services / rest areas.
@@ -111,7 +115,7 @@ export async function planTrip(args: {
     })),
   ].filter((c) => c.points.length > 0);
 
-  progress("Finding fuel stations & rest stops along the route…");
+  progress("planStep.findingStops");
   let routePois: RoutePoi[] = [];
   try {
     const { pois } = await postJson<{ pois: { id: string; name?: string; lat: number; lon: number; kind: PoiKind }[] }>(
@@ -119,19 +123,19 @@ export async function planTrip(args: {
       { corridors, radiusM: 6000 },
     );
     routePois = pois.map((p) => ({ ...p, ...nearestOnRoute(coords, cum, [p.lon, p.lat]) }));
-  } catch (err) {
-    warnings.push(`Stop lookup failed (${String(err)}) — fuel/rest markers show ideal points only.`);
+  } catch {
+    warnings.push("warn.stopLookupFailed");
   }
 
   const fuelStops = planFuelStops(coords, cum, args.rangeKm, routePois);
   const restStops = planRestStops(coords, cum, restIntervalKm, routePois, fuelStops);
 
-  progress("Calculating costs…");
+  progress("planStep.costs");
   const [prices, tollguru] = await Promise.all([
     fetch("/api/fuel-prices")
       .then((r) => r.json() as Promise<FuelPricesResponse>)
       .catch(() => {
-        warnings.push("Fuel price lookup failed — using the built-in fallback table.");
+        warnings.push("warn.fuelPriceFallback");
         return null;
       }),
     postJson<TollGuruResult>("/api/tolls", {
@@ -140,7 +144,7 @@ export async function planTrip(args: {
   ]);
 
   if (!tollguru.available) {
-    warnings.push("Tolls are a rough built-in estimate (no TollGuru key) — verify before relying on them.");
+    warnings.push("warn.tollEstimate");
   }
 
   return { route, fuelStops, restStops, restIntervalKm, prices, tollguru, warnings };

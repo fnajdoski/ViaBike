@@ -59,15 +59,17 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* Big automotive wordmark treatment — graphite on light, white on dark */
+/* Big automotive wordmark treatment — graphite on light, white on dark.
+   Display font is Latin-only; Cyrillic glyphs fall back per-glyph to the
+   body font (Inter, which carries Cyrillic) so translated headings stay clean. */
 .wordmark-solid {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display), var(--font-body), sans-serif;
   font-weight: 800;
   letter-spacing: 0.06em;
   line-height: 0.95;
 }
 .wordmark-outline {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display), var(--font-body), sans-serif;
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 0.95;
@@ -92,7 +94,7 @@ body {
 }
 
 .tile-number {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display), var(--font-body), sans-serif;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }

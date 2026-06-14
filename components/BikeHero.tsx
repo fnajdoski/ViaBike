@@ -1,6 +1,7 @@
 "use client";
 
 import { getBike } from "@/data/bikes";
+import { useT } from "@/state/locale";
 import { useRideCost } from "@/state/store";
 import BikeArt from "./BikeArt";
 
@@ -9,6 +10,7 @@ export default function BikeHero() {
   const loaded = useRideCost((s) => s.loaded);
   const setLoaded = useRideCost((s) => s.setLoaded);
   const clearBike = useRideCost((s) => s.clearBike);
+  const t = useT();
   const bike = bikeId ? getBike(bikeId) : undefined;
   if (!bike) return null;
 
@@ -31,24 +33,24 @@ export default function BikeHero() {
               onClick={() => setLoaded(false)}
               className={`cursor-pointer rounded-full px-4 py-1.5 transition ${!loaded ? "bg-accent font-semibold text-night" : "text-mute hover:text-ink"}`}
             >
-              Solo
+              {t("hero.solo")}
             </button>
             <button
               onClick={() => setLoaded(true)}
               className={`cursor-pointer rounded-full px-4 py-1.5 transition ${loaded ? "bg-accent font-semibold text-night" : "text-mute hover:text-ink"}`}
             >
-              Loaded — luggage + passenger (+10%)
+              {t("hero.loaded")}
             </button>
           </div>
           <button
             onClick={clearBike}
             className="panel cursor-pointer rounded-full px-4 py-2 text-xs text-mute transition hover:text-ink"
           >
-            ⇄ Change bike
+            ⇄ {t("hero.changeBike")}
           </button>
         </div>
         <p className="text-mute mx-auto mt-2 max-w-md text-[10px] leading-snug" title={bike.sourceNote}>
-          Figures: {bike.sourceNote}
+          {t("hero.figures", { note: bike.sourceNote })}
         </p>
       </div>
     </section>

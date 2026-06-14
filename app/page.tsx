@@ -13,8 +13,12 @@ import { getBike } from "@/data/bikes";
 import { effectiveConsumption } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
 import { buildCostBreakdown } from "@/lib/cost";
+import { buildGoogleMapsUrl } from "@/lib/googleMaps";
 import { saveResult } from "@/lib/session";
+import { useT } from "@/state/locale";
 import { useRideCost } from "@/state/store";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import OfflineBanner from "@/components/OfflineBanner";
 
 export default function Home() {
   const bikeId = useRideCost((s) => s.bikeId);
@@ -24,13 +28,21 @@ export default function Home() {
   const tollguru = useRideCost((s) => s.tollguru);
   const extras = useRideCost((s) => s.extras);
   const status = useRideCost((s) => s.status);
+  const waypoints = useRideCost((s) => s.waypoints);
+  const t = useT();
 
   const bike = bikeId ? getBike(bikeId) : undefined;
+
+  const gmapsUrl = useMemo(
+    () => buildGoogleMapsUrl(waypoints.filter((w) => w.lonLat).map((w) => w.lonLat!)),
+    [waypoints],
+  );
 
   const breakdown = useMemo(() => {
     if (!bike || !route) return null;
     return buildCostBreakdown({
       segments: route.countrySegments,
+      tollSegments: route.tollwaySegments,
       effectiveLper100: effectiveConsumption(bike, loaded ? LOAD_FACTOR_LOADED : LOAD_FACTOR_SOLO),
       prices: prices?.prices,
       tollsOverride:
@@ -68,13 +80,16 @@ export default function Home() {
         <p className="wordmark-solid text-lg tracking-[0.2em]">
           RIDE<span className="text-accent">COST</span>
         </p>
-        <span className="flex items-center gap-3">
-          <p className="hidden text-[10px] uppercase tracking-[0.25em] text-mute sm:block">
-            Motorcycle trip cost & rest-stop planner
+        <span className="flex items-center gap-2 sm:gap-3">
+          <p className="hidden text-[10px] uppercase tracking-[0.25em] text-mute lg:block">
+            {t("app.subtitle")}
           </p>
+          <LanguageSwitcher />
           <ThemeToggle />
         </span>
       </header>
+
+      <OfflineBanner />
 
       {!bike ? (
         <BikePicker />
@@ -87,6 +102,16 @@ export default function Home() {
             <MapView />
           </div>
           <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6">
+            {status === "done" && gmapsUrl && (
+              <a
+                href={gmapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="panel inline-flex w-fit items-center gap-2 self-start px-4 py-2 text-sm font-semibold text-accent transition hover:border-accent/60"
+              >
+                🧭 {t("planner.openInMaps")} ↗
+              </a>
+            )}
             <StopsList />
             <CostPanel breakdown={breakdown} />
           </div>

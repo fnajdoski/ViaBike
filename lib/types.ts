@@ -51,6 +51,9 @@ export type Waypoint = {
   lonLat: LonLat | null; // null until geocoded / placed on map
 };
 
+/** Rest-stop cadence mode. "none" disables rest stops (fuel stops still run). */
+export type RestMode = "distance" | "time" | "none";
+
 export type RouteLeg = { distanceKm: number; durationMin: number };
 
 export type CountrySegment = {
@@ -64,6 +67,8 @@ export type RouteData = {
   durationMin: number;
   legs: RouteLeg[];
   countrySegments: CountrySegment[];
+  /** Distance per country on roads ORS marks as tollway (empty without ORS). */
+  tollwaySegments: CountrySegment[];
   source: "ors" | "osrm-demo";
 };
 
@@ -92,7 +97,8 @@ export type PlannedStop = {
   point: LonLat;
   poi?: RoutePoi;
   status: StopStatus;
-  note?: string;
+  /** i18n key for the explanatory note (translated in the UI). */
+  noteKey?: string;
   combinedWithFuel?: boolean; // rest stop that reuses a fuel stop
 };
 

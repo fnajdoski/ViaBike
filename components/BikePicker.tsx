@@ -4,11 +4,14 @@ import { useMemo, useState } from "react";
 import { bikes } from "@/data/bikes";
 import { rangeKm } from "@/lib/bike";
 import { LOAD_FACTOR_SOLO } from "@/lib/constants";
+import { useFormat, useT } from "@/state/locale";
 import { useRideCost } from "@/state/store";
 import BikeArt from "./BikeArt";
 
 export default function BikePicker() {
   const selectBike = useRideCost((s) => s.selectBike);
+  const t = useT();
+  const fmt = useFormat();
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -19,17 +22,14 @@ export default function BikePicker() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">
-      <p className="text-mute text-sm uppercase tracking-[0.3em]">Step 1</p>
-      <h1 className="wordmark-solid mt-1 text-4xl">PICK YOUR BIKE</h1>
-      <p className="text-mute mt-2 max-w-xl text-sm">
-        Range and costs are computed from your specific bike — tank size and a real-world
-        consumption figure, not the brochure number.
-      </p>
+      <p className="text-mute text-sm uppercase tracking-[0.3em]">{t("picker.step1")}</p>
+      <h1 className="wordmark-solid mt-1 text-4xl">{t("picker.title")}</h1>
+      <p className="text-mute mt-2 max-w-xl text-sm">{t("picker.intro")}</p>
 
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search brand or model…"
+        placeholder={t("picker.search")}
         className="panel mt-6 w-full max-w-md px-4 py-2.5 text-sm outline-none placeholder:text-mute focus:border-accent"
       />
 
@@ -48,16 +48,14 @@ export default function BikePicker() {
             <p className="text-mute mt-3 text-xs uppercase tracking-widest">{bike.brand}</p>
             <p className="wordmark-solid text-lg">{bike.model}</p>
             <p className="text-mute mt-2 text-xs">
-              {bike.tankLiters} L · {bike.consumptionLper100.toFixed(1)} L/100km ·{" "}
-              <span className="text-ink">~{Math.round(rangeKm(bike, LOAD_FACTOR_SOLO))} km range</span>
+              {fmt.num(bike.tankLiters)} {t("unit.l")} · {bike.consumptionLper100.toFixed(1)} {t("unit.lper100")} ·{" "}
+              <span className="text-ink">~{fmt.num(Math.round(rangeKm(bike, LOAD_FACTOR_SOLO)))} {t("picker.rangeSuffix")}</span>
             </p>
           </button>
           );
         })}
         {filtered.length === 0 && (
-          <p className="text-mute col-span-full py-10 text-center text-sm">
-            No match — adding a bike is a one-line edit in <code>data/bikes.ts</code>.
-          </p>
+          <p className="text-mute col-span-full py-10 text-center text-sm">{t("picker.noMatch")}</p>
         )}
       </div>
     </div>
