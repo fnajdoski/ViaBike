@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { getBike } from "@/data/bikes";
 import { useRideCost } from "@/state/store";
+import BikeArt from "./BikeArt";
 
 export default function BikeHero() {
   const bikeId = useRideCost((s) => s.bikeId);
@@ -11,13 +11,6 @@ export default function BikeHero() {
   const clearBike = useRideCost((s) => s.clearBike);
   const bike = bikeId ? getBike(bikeId) : undefined;
   if (!bike) return null;
-
-  // Photo priority: any real photo beats the silhouette — a bike with only a
-  // loaded photo shows it in both states until a solo shot is added.
-  const heroImage = loaded
-    ? (bike.imageUrlLoaded ?? bike.imageUrlSolo ?? bike.imageUrl)
-    : (bike.imageUrlSolo ?? bike.imageUrlLoaded ?? bike.imageUrl);
-  const isSilhouette = heroImage === bike.imageUrl;
 
   return (
     <section className="hero-grid relative overflow-hidden px-6 pb-4 pt-10 text-center">
@@ -29,13 +22,7 @@ export default function BikeHero() {
         )}
 
         <div className="relative mx-auto -mt-2 h-52 max-w-xl sm:h-64">
-          <Image
-            src={heroImage}
-            alt={`${bike.brand} ${bike.model}`}
-            fill
-            priority
-            className={`object-contain ${isSilhouette ? "bike-silhouette" : ""}`}
-          />
+          <BikeArt bike={bike} loaded={loaded} priority sizes="(max-width: 640px) 90vw, 640px" />
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pb-2">

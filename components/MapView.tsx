@@ -99,7 +99,15 @@ export default function MapView() {
       else s.addWaypoint({ lonLat, name });
     });
     mapRef.current = map;
+
+    // MapLibre needs a concrete size and won't auto-grow — repaint whenever the
+    // container's height changes (planner column growing, window resize, theme
+    // toggle, panel-height changes). Covers the desktop stretch-to-column case.
+    const ro = new ResizeObserver(() => map.resize());
+    if (containerRef.current) ro.observe(containerRef.current);
+
     return () => {
+      ro.disconnect();
       for (const m of markersRef.current) m.remove();
       markersRef.current = [];
       map.remove();
@@ -189,8 +197,10 @@ export default function MapView() {
   useEffect(syncMarkers, [waypoints, fuelStops, restStops]);
 
   return (
-    <div className="panel relative overflow-hidden">
-      <div ref={containerRef} className="h-[460px] w-full" />
+    // mobile keeps a fixed height; at lg the panel stretches to the grid row
+    // (driven by the taller planner column) so there's no white strip below.
+    <div className="panel relative h-[460px] overflow-hidden lg:h-full">
+      <div ref={containerRef} className="h-full w-full" />
       <p className="text-mute absolute bottom-2 left-2 z-10 rounded bg-night/70 px-2 py-1 text-[10px]">
         Click the map to drop waypoints · drag markers to adjust
       </p>

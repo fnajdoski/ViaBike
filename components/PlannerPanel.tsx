@@ -1,29 +1,90 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRideCost } from "@/state/store";
+import { debounce, shouldQuery, type Suggestion } from "@/lib/autocomplete";
 import { loadResult, type LastResultSummary } from "@/lib/session";
 import type { Waypoint } from "@/lib/types";
 import SavedTrips from "./SavedTrips";
 
 function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count: number }) {
   const { updateWaypoint, removeWaypoint, moveWaypoint } = useRideCost.getState();
-  const [results, setResults] = useState<{ name: string; lat: number; lon: number }[]>([]);
-  const [searching, setSearching] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const [loading, setLoading] = useState(false);
   const letter = String.fromCharCode(65 + (index % 26));
 
-  async function search() {
-    const q = wp.name.trim();
-    if (!q) return;
-    setSearching(true);
+  async function query(q: string) {
     try {
-      const res = await fetch(`/api/geocode?q=${encodeURIComponent(q)}`);
+      setLoading(true);
+      const res = await fetch(`/api/autocomplete?q=${encodeURIComponent(q)}`);
       const data = await res.json();
-      setResults(data.results ?? []);
+      setSuggestions(data.results ?? []);
+      setActive(-1);
+      setOpen(true);
     } catch {
-      setResults([]);
+      setSuggestions([]);
     } finally {
-      setSearching(false);
+      setLoading(false);
+    }
+  }
+
+  // one debounced fetch per row, stable across renders; cancelled on unmount
+  const debouncedQuery = useRef(debounce((q: string) => query(q), 280)).current;
+  useEffect(() => () => debouncedQuery.cancel(), [debouncedQuery]);
+
+  function onChange(value: string) {
+    updateWaypoint(wp.id, { name: value, lonLat: null });
+    if (shouldQuery(value)) {
+      debouncedQuery(value.trim());
+    } else {
+      debouncedQuery.cancel();
+      setSuggestions([]);
+      setOpen(false);
+    }
+  }
+
+  function select(s: Suggestion) {
+    updateWaypoint(wp.id, { name: s.name, lonLat: [s.lon, s.lat] });
+    setSuggestions([]);
+    setOpen(false);
+    setActive(-1);
+  }
+
+  // manual fallback (magnifier / Enter with no highlight): query immediately
+  function manualSearch() {
+    const q = wp.name.trim();
+    if (!shouldQuery(q)) return;
+    debouncedQuery.cancel();
+    query(q);
+  }
+
+  function onKeyDown(e: React.KeyboardEvent) {
+    if (open && suggestions.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActive((i) => Math.min(i + 1, suggestions.length - 1));
+        return;
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActive((i) => Math.max(i - 1, 0));
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (active >= 0) select(suggestions[active]);
+        else manualSearch();
+        return;
+      }
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      manualSearch();
     }
   }
 
@@ -33,18 +94,23 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
         <span className={`marker-chip marker-wp shrink-0 ${wp.lonLat ? "" : "opacity-40"}`}>{letter}</span>
         <input
           value={wp.name}
-          onChange={(e) => updateWaypoint(wp.id, { name: e.target.value, lonLat: null })}
-          onKeyDown={(e) => e.key === "Enter" && search()}
-          placeholder={index === 0 ? "Start — type a place, press Enter" : index === count - 1 ? "Destination" : "Via"}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={onKeyDown}
+          onFocus={() => suggestions.length > 0 && setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          role="combobox"
+          aria-expanded={open}
+          aria-autocomplete="list"
+          placeholder={index === 0 ? "Start — type a place…" : index === count - 1 ? "Destination" : "Via"}
           className="w-full rounded-md border border-line bg-panel2 px-3 py-2 text-sm outline-none placeholder:text-mute focus:border-accent"
         />
         <button
-          onClick={search}
-          disabled={searching}
+          onClick={manualSearch}
+          disabled={loading}
           title="Search place"
           className="cursor-pointer rounded-md border border-line bg-panel2 px-2.5 py-2 text-sm text-mute transition hover:text-ink disabled:opacity-50"
         >
-          {searching ? "…" : "🔍"}
+          {loading ? "…" : "🔍"}
         </button>
         <div className="flex shrink-0 flex-col">
           <button onClick={() => moveWaypoint(wp.id, -1)} className="cursor-pointer px-1 text-[10px] text-mute hover:text-ink" title="Move up">▲</button>
@@ -59,21 +125,27 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
           ✕
         </button>
       </div>
-      {results.length > 0 && (
-        <ul className="panel absolute inset-x-10 z-30 mt-1 max-h-44 overflow-auto text-xs shadow-xl">
-          {results.map((r, i) => (
+      {open && suggestions.length > 0 && (
+        <ul className="panel absolute inset-x-10 z-30 mt-1 max-h-56 overflow-auto text-xs shadow-xl" role="listbox">
+          {suggestions.map((s, i) => (
             <li key={i}>
               <button
-                className="w-full cursor-pointer px-3 py-2 text-left transition hover:bg-panel2"
-                onClick={() => {
-                  updateWaypoint(wp.id, { name: r.name.split(",").slice(0, 2).join(","), lonLat: [r.lon, r.lat] });
-                  setResults([]);
-                }}
+                type="button"
+                // keep input focus so the click lands before onBlur closes us
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => select(s)}
+                className={`block w-full cursor-pointer px-3 py-2 text-left transition ${i === active ? "bg-panel2" : "hover:bg-panel2"}`}
               >
-                {r.name}
+                <span className="text-ink">{s.name}</span>
+                {s.detail && <span className="text-mute"> · {s.detail}</span>}
               </button>
             </li>
           ))}
+        </ul>
+      )}
+      {open && !loading && suggestions.length === 0 && shouldQuery(wp.name) && (
+        <ul className="panel absolute inset-x-10 z-30 mt-1 text-xs shadow-xl">
+          <li className="px-3 py-2 text-mute">No matches</li>
         </ul>
       )}
     </div>

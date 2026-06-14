@@ -396,7 +396,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 13.2 L: Honda spec (honda.co.uk; the brief's 13.1 was a rounding). Consumption: Honda WMTC 3.6; owner reports 3.7–4.2 — 3.9 used.",
     wordmark: { solid: "X-ADV", outline: "750" },
-    category: "adventure",
+    category: "maxiscooter",
   },
   {
     id: "honda-cb750-hornet",
@@ -692,7 +692,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 21 L: Moto Guzzi spec (V7 850, 2021+). Consumption: Guzzi WMTC 4.7; owner reports 4.5–5.2 — 4.8 used.",
     wordmark: { solid: "V", outline: "7" },
-    category: "naked",
+    category: "retro",
   },
   {
     id: "bmw-r1300rt",
@@ -731,7 +731,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 16 L: BMW spec (R12 cruiser, 1170cc boxer). Consumption: BMW WMTC 4.8; owner reports ~5.0–5.6 — 5.3 used, estimate.",
     wordmark: { solid: "R", outline: "12" },
-    category: "touring",
+    category: "cruiser",
   },
   {
     id: "bmw-r12-ninet",
@@ -744,7 +744,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 16 L: BMW spec. Consumption: BMW WMTC 4.9; nineT owners report 5.2–5.8 ridden as intended — 5.5 used.",
     wordmark: { solid: "R 12", outline: "NINET" },
-    category: "naked",
+    category: "retro",
   },
   {
     id: "yamaha-tenere-700-world-raid",
@@ -783,7 +783,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 7.1 L: Yamaha spec. Consumption: Yamaha WMTC 2.2; owner reports 2.1–2.5 — 2.3 used. Top-selling 125 scooter in Europe.",
     wordmark: { solid: "NMAX", outline: "125" },
-    category: "touring",
+    category: "scooter",
   },
   {
     id: "yamaha-tmax-560",
@@ -796,7 +796,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 15 L: Yamaha spec (2020+). Consumption: Yamaha WMTC 4.8; owner reports 4.3–4.8 — 4.6 used. Europe's perennial best-selling maxi-scooter.",
     wordmark: { solid: "TMAX", outline: "560" },
-    category: "touring",
+    category: "maxiscooter",
   },
   {
     id: "yamaha-warrior-1700",
@@ -809,7 +809,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 15.1 L (4.0 US gal): Yamaha spec (XV1700PC, 2002–2009). Consumption: owner reports 5.5–6.5 — 6.0 used, estimate (older model, sparse data).",
     wordmark: { solid: "WARRIOR", outline: "1700" },
-    category: "touring",
+    category: "cruiser",
   },
   {
     id: "yamaha-super-tenere-1200",
@@ -874,7 +874,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 6.0 L: Honda spec (2022+). Consumption: Honda claim 1.5; owner reports 1.6–2.0 — 1.8 used.",
     wordmark: { solid: "GROM", outline: "MSX125" },
-    category: "naked",
+    category: "small",
   },
   {
     id: "honda-cb125f",
@@ -887,7 +887,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 11 L: Honda spec. Consumption: Honda WMTC 1.5 (66 km/L claim); owner reports 1.6–2.0 — 1.8 used. ~600 km real range.",
     wordmark: { solid: "CB125", outline: "F" },
-    category: "naked",
+    category: "small",
   },
   {
     id: "honda-pcx125",
@@ -900,7 +900,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 8.1 L: Honda spec. Consumption: Honda WMTC 2.1; owner reports 2.0–2.4 — 2.2 used. Europe's best-selling scooter.",
     wordmark: { solid: "PCX", outline: "125" },
-    category: "touring",
+    category: "scooter",
   },
   {
     id: "honda-adv350",
@@ -913,7 +913,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 11.7 L: Honda spec. Consumption: Honda WMTC 3.1; owner reports 3.1–3.6 — 3.3 used.",
     wordmark: { solid: "ADV", outline: "350" },
-    category: "touring",
+    category: "maxiscooter",
   },
   {
     id: "honda-rebel-1100",
@@ -926,7 +926,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 13.6 L: Honda spec. Consumption: Africa Twin 1084cc twin in a cruiser — Honda WMTC 4.9 matches owner reports (4.7–5.3) — 4.9 used.",
     wordmark: { solid: "REBEL", outline: "1100" },
-    category: "touring",
+    category: "cruiser",
   },
   {
     id: "triumph-street-triple-765",
@@ -952,7 +952,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 13 L: Triumph spec. Consumption: Triumph claim 3.5; owner reports 3.2–3.7 — 3.4 used.",
     wordmark: { solid: "SPEED", outline: "400" },
-    category: "naked",
+    category: "small",
   },
   {
     id: "triumph-scrambler-400x",
@@ -965,7 +965,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 13 L: Triumph spec. Consumption: same 398cc single as the Speed 400, taller gearing/knobblier tires — owner reports 3.4–3.9 — 3.6 used.",
     wordmark: { solid: "SCRAMBLER", outline: "400X" },
-    category: "adventure",
+    category: "retro",
   },
   {
     id: "triumph-bonneville-t120",
@@ -978,7 +978,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 14.5 L: Triumph spec. Consumption: Triumph claim 4.6; owner reports 4.5–5.2 — 4.8 used.",
     wordmark: { solid: "BONNEVILLE", outline: "T120" },
-    category: "naked",
+    category: "retro",
   },
   {
     id: "ktm-390-duke",
@@ -991,7 +991,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 15 L: KTM spec (2024 gen). Consumption: KTM claim 3.5; owner reports 3.5–4.1 — 3.8 used.",
     wordmark: { solid: "390", outline: "DUKE" },
-    category: "naked",
+    category: "small",
   },
   {
     id: "ktm-990-duke-r",
@@ -1030,7 +1030,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 17 L: Kawasaki spec. Consumption: retuned Z900 four, ridden gentler — owner reports 5.2–5.9 — 5.5 used.",
     wordmark: { solid: "Z900", outline: "RS" },
-    category: "naked",
+    category: "retro",
   },
   {
     id: "ducati-monster",
@@ -1056,7 +1056,7 @@ export const bikes: Bike[] = [
     sourceNote:
       "Tank 13 L: RE spec for the Classic 350 (the Meteor 350 carries 15 L — same J-platform engine, collapsed into one entry; use 15 L mentally for the Meteor). Consumption: owner reports 2.7–3.2 — 2.9 used.",
     wordmark: { solid: "CLASSIC", outline: "350" },
-    category: "naked",
+    category: "retro",
   },
   {
     id: "harley-cvo-glide",
@@ -1109,6 +1109,47 @@ export const bikes: Bike[] = [
       "Tank 19 L: Husqvarna spec. Consumption: KTM 890 LC8c engine; owner reports 4.6–5.2 — 4.9 used.",
     wordmark: { solid: "NORDEN", outline: "901" },
     category: "adventure",
+  },
+
+  // ——— 2026-06 additions ———
+  {
+    id: "ducati-monster-821",
+    brand: "Ducati",
+    model: "Monster 821",
+    year: 2018,
+    imageUrl: "/bikes/naked.svg",
+    tankLiters: 16.5,
+    consumptionLper100: 5.3,
+    sourceNote:
+      "Tank 16.5 L: Ducati spec (2014–2020; some sources list 17.5 L). Consumption: 821cc Testastretta L-twin; Fuelly owners ~45–50 US mpg → 4.7–5.2, ridden with enthusiasm 5.3 used.",
+    wordmark: { solid: "MONSTER", outline: "821" },
+    category: "naked",
+  },
+  {
+    id: "yamaha-mt-03",
+    brand: "Yamaha",
+    model: "MT-03",
+    year: 2024,
+    imageUrl: "/bikes/naked.svg",
+    tankLiters: 14,
+    consumptionLper100: 4.0,
+    sourceNote:
+      "Tank 14 L: Yamaha spec. Consumption: 321cc parallel-twin; owner/press reports ~56 mpg (≈3.8–4.2 L/100) — 4.0 used.",
+    wordmark: { solid: "MT", outline: "03" },
+    category: "small",
+  },
+  {
+    id: "yamaha-mt-01",
+    brand: "Yamaha",
+    model: "MT-01",
+    year: 2009,
+    imageUrl: "/bikes/naked.svg",
+    tankLiters: 15,
+    consumptionLper100: 7.2,
+    sourceNote:
+      "Tank 15 L: Yamaha spec (1670cc air-cooled V-twin, 2005–2012). Consumption: thirsty muscle V-twin — road tests ~7.5 L/100 (≈38 mpg); 7.2 used as a real-world estimate (sparse data, older model).",
+    wordmark: { solid: "MT", outline: "01" },
+    category: "naked",
   },
 ];
 

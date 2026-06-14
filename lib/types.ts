@@ -1,6 +1,30 @@
 /** [longitude, latitude] — GeoJSON order, used everywhere in this app. */
 export type LonLat = [number, number];
 
+/** Bike body style — drives the category illustration shown for the bike. */
+export type BikeCategory =
+  | "sport"
+  | "naked"
+  | "adventure"
+  | "touring"
+  | "cruiser"
+  | "retro"
+  | "scooter"
+  | "maxiscooter"
+  | "small";
+
+/** Luggage drawn on the "loaded" illustration. Defaults from category; a bike
+ * may override it (e.g. a flagship tourer with integrated cases). */
+export type LuggageStyle =
+  | "hard-panniers"
+  | "tail-bag"
+  | "tank-bag"
+  | "leather-saddlebags"
+  | "soft-saddlebag"
+  | "integrated-cases"
+  | "top-box"
+  | "minimal";
+
 export type Bike = {
   id: string;
   brand: string;
@@ -16,7 +40,9 @@ export type Bike = {
   sourceNote: string; // where the figures came from
   /** Big hero treatment: solid line over outlined line (BMW-Connected vibe). */
   wordmark: { solid: string; outline?: string };
-  category: "adventure" | "sport" | "touring" | "naked";
+  category: BikeCategory;
+  /** Optional override of the category's default loaded-luggage style. */
+  luggageStyle?: LuggageStyle;
 };
 
 export type Waypoint = {
