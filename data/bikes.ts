@@ -36,6 +36,8 @@ export const bikes: Bike[] = [
     model: "YZF-R1",
     year: 2024,
     imageUrl: "/bikes/sport.svg",
+    imageUrlSolo: "/bikes/yamaha-yzf-r1/solo.png", // user-supplied asset
+    imageUrlLoaded: "/bikes/yamaha-yzf-r1/loaded.png", // user-supplied: saddlebags + tank bag
     tankLiters: 17,
     consumptionLper100: 6.8,
     sourceNote:
@@ -246,6 +248,8 @@ export const bikes: Bike[] = [
     model: "S 1000 XR",
     year: 2024,
     imageUrl: "/bikes/sport.svg",
+    imageUrlSolo: "/bikes/bmw-s1000xr/solo.png", // user-supplied asset
+    imageUrlLoaded: "/bikes/bmw-s1000xr/loaded.png", // user-supplied: panniers + top box + pillion
     tankLiters: 20,
     consumptionLper100: 6.2,
     sourceNote:
