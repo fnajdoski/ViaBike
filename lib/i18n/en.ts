@@ -5,6 +5,7 @@
  */
 export const en = {
   "app.subtitle": "Motorcycle trip cost & rest-stop planner",
+  "intro.tagline": "Plan the ride. Know the cost.",
 
   "lang.label": "Language",
   "lang.en": "English",
