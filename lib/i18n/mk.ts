@@ -62,6 +62,11 @@ export const mk: Record<MessageKey, string> = {
   "planner.lastSavedSub": "испланирај повторно за тековни цени",
   "planner.replan": "Повторно",
   "planner.openInMaps": "Отвори во Google Maps",
+  "export.gpx": "Преземи GPX",
+  "export.includeFuel": "Вклучи застанувања за гориво",
+  "export.includeRest": "Вклучи застанувања за одмор",
+  "export.capped":
+    "Google Maps собира ~{max} застанувања по линк — вклучени се твојата рута + {fuelInc}/{fuelTot} гориво и {restInc}/{restTot} одмор. Преземи GPX за сите застанувања.",
   "planner.savedTrips": "Зачувани патувања",
   "planner.tripName": "Име на патување…",
   "planner.save": "Зачувај",

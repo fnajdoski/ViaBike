@@ -134,6 +134,20 @@ Turbopack with no webpack config. The SW is disabled in development.
   with `sharp`. To use your own brand icon, edit the SVG in that script (or drop
   replacement PNGs at the same `public/` paths) and run `node scripts/generate-icons.mjs`.
 
+## Exporting a planned trip
+
+After planning, two exports are built **client-side from the in-memory plan** (no
+extra API calls):
+
+- **Open in Google Maps** — a directions URL including your stops, in priority
+  order (explicit waypoints always, then fuel, then an evenly-spaced subset of
+  rest stops) within Google's ~9-waypoint / 2,048-char free-link limits. Toggles
+  let you include/exclude fuel and rest; a note shows what was capped. On phones
+  it deep-links into the Google Maps app (`travelmode=driving`).
+- **Download GPX** — a GPX 1.1 file with the full route track **and a waypoint for
+  every stop** (no limit), named after the trip. Imports into **BMW Connected,
+  Calimoto, OsmAnd, and Garmin** (and most other nav apps that accept GPX).
+
 ## Roadmap (post-v1)
 
 - Live FX rates behind the same pattern as fuel prices.

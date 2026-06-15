@@ -13,10 +13,10 @@ import { getBike } from "@/data/bikes";
 import { effectiveConsumption } from "@/lib/bike";
 import { LOAD_FACTOR_LOADED, LOAD_FACTOR_SOLO } from "@/lib/constants";
 import { buildCostBreakdown } from "@/lib/cost";
-import { buildGoogleMapsUrl } from "@/lib/googleMaps";
 import { saveResult } from "@/lib/session";
 import { useT } from "@/state/locale";
 import { useRideCost } from "@/state/store";
+import ExportBar from "@/components/ExportBar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import OfflineBanner from "@/components/OfflineBanner";
 
@@ -28,15 +28,9 @@ export default function Home() {
   const tollguru = useRideCost((s) => s.tollguru);
   const extras = useRideCost((s) => s.extras);
   const status = useRideCost((s) => s.status);
-  const waypoints = useRideCost((s) => s.waypoints);
   const t = useT();
 
   const bike = bikeId ? getBike(bikeId) : undefined;
-
-  const gmapsUrl = useMemo(
-    () => buildGoogleMapsUrl(waypoints.filter((w) => w.lonLat).map((w) => w.lonLat!)),
-    [waypoints],
-  );
 
   const breakdown = useMemo(() => {
     if (!bike || !route) return null;
@@ -102,16 +96,7 @@ export default function Home() {
             <MapView />
           </div>
           <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6">
-            {status === "done" && gmapsUrl && (
-              <a
-                href={gmapsUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="panel inline-flex w-fit items-center gap-2 self-start px-4 py-2 text-sm font-semibold text-accent transition hover:border-accent/60"
-              >
-                🧭 {t("planner.openInMaps")} ↗
-              </a>
-            )}
+            <ExportBar />
             <StopsList />
             <CostPanel breakdown={breakdown} />
           </div>

@@ -64,6 +64,11 @@ export const en = {
   "planner.lastSavedSub": "re-plan for current prices",
   "planner.replan": "Re-plan",
   "planner.openInMaps": "Open in Google Maps",
+  "export.gpx": "Download GPX",
+  "export.includeFuel": "Include fuel stops",
+  "export.includeRest": "Include rest stops",
+  "export.capped":
+    "Google Maps fits ~{max} stops per link — included your route + {fuelInc}/{fuelTot} fuel and {restInc}/{restTot} rest stops. Download the GPX for every stop.",
   "planner.savedTrips": "Saved trips",
   "planner.tripName": "Trip name…",
   "planner.save": "Save",
