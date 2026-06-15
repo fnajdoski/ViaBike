@@ -17,7 +17,15 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [loading, setLoading] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [locDenied, setLocDenied] = useState(false); // remembered for the session
+  const [locError, setLocError] = useState<MessageKey | null>(null);
   const letter = String.fromCharCode(65 + (index % 26));
+
+  const isOrigin = index === 0;
+  // pinned "Use my location" row, offered on Point A until denied this session
+  const showLoc = isOrigin && !locDenied;
+  const optionCount = (showLoc ? 1 : 0) + suggestions.length;
 
   async function query(q: string) {
     try {
@@ -40,12 +48,12 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
 
   function onChange(value: string) {
     updateWaypoint(wp.id, { name: value, lonLat: null });
+    setLocError(null);
     if (shouldQuery(value)) {
       debouncedQuery(value.trim());
     } else {
       debouncedQuery.cancel();
       setSuggestions([]);
-      setOpen(false);
     }
   }
 
@@ -64,11 +72,49 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
     query(q);
   }
 
+  // Geolocation is requested ONLY here, on the explicit tap — never on load.
+  function useMyLocation() {
+    if (locating) return;
+    setLocError(null);
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setLocError("loc.error");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        let name = t("loc.myLocation");
+        try {
+          const res = await fetch(`/api/reverse?lat=${latitude}&lon=${longitude}`);
+          const data = await res.json();
+          if (data?.name) name = data.name;
+        } catch {
+          /* keep the generic label — coords still drive the route */
+        }
+        updateWaypoint(wp.id, { name, lonLat: [longitude, latitude] });
+        setLocating(false);
+        setOpen(false);
+        setSuggestions([]);
+      },
+      (err) => {
+        setLocating(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          setLocDenied(true);
+          setLocError("loc.denied");
+        } else {
+          setLocError("loc.error");
+        }
+      },
+      { timeout: 10000, maximumAge: 60000 },
+    );
+  }
+
   function onKeyDown(e: React.KeyboardEvent) {
-    if (open && suggestions.length > 0) {
+    if (open && optionCount > 0) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setActive((i) => Math.min(i + 1, suggestions.length - 1));
+        setActive((i) => Math.min(i + 1, optionCount - 1));
         return;
       }
       if (e.key === "ArrowUp") {
@@ -78,9 +124,9 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
       }
       if (e.key === "Enter") {
         e.preventDefault();
-        if (active >= 0) select(suggestions[active]);
-        else manualSearch();
-        return;
+        if (active < 0) return manualSearch();
+        if (showLoc && active === 0) return useMyLocation();
+        return select(suggestions[active - (showLoc ? 1 : 0)]);
       }
       if (e.key === "Escape") {
         setOpen(false);
@@ -92,6 +138,8 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
     }
   }
 
+  const showNoMatches = !loading && suggestions.length === 0 && shouldQuery(wp.name);
+
   return (
     <div className="relative">
       <div className="flex items-center gap-2">
@@ -100,7 +148,7 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
           value={wp.name}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
-          onFocus={() => suggestions.length > 0 && setOpen(true)}
+          onFocus={() => (isOrigin || suggestions.length > 0) && setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           role="combobox"
           aria-expanded={open}
@@ -129,29 +177,43 @@ function WaypointRow({ wp, index, count }: { wp: Waypoint; index: number; count:
           ✕
         </button>
       </div>
-      {open && suggestions.length > 0 && (
+      {open && (showLoc || suggestions.length > 0 || showNoMatches) && (
         <ul className="panel absolute inset-x-10 z-30 mt-1 max-h-56 overflow-auto text-xs shadow-xl" role="listbox">
-          {suggestions.map((s, i) => (
-            <li key={i}>
+          {showLoc && (
+            <li>
               <button
                 type="button"
-                // keep input focus so the click lands before onBlur closes us
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => select(s)}
-                className={`block w-full cursor-pointer px-3 py-2 text-left transition ${i === active ? "bg-panel2" : "hover:bg-panel2"}`}
+                onClick={useMyLocation}
+                aria-busy={locating}
+                className={`flex w-full cursor-pointer items-center gap-2 border-b border-line/60 px-3 py-2 text-left font-medium text-accent transition ${active === 0 ? "bg-panel2" : "hover:bg-panel2"}`}
               >
-                <span className="text-ink">{s.name}</span>
-                {s.detail && <span className="text-mute"> · {s.detail}</span>}
+                <span aria-hidden>📍</span>
+                {locating ? t("loc.locating") : t("loc.use")}
               </button>
             </li>
-          ))}
+          )}
+          {suggestions.map((s, i) => {
+            const optIdx = i + (showLoc ? 1 : 0);
+            return (
+              <li key={i}>
+                <button
+                  type="button"
+                  // keep input focus so the click lands before onBlur closes us
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => select(s)}
+                  className={`block w-full cursor-pointer px-3 py-2 text-left transition ${optIdx === active ? "bg-panel2" : "hover:bg-panel2"}`}
+                >
+                  <span className="text-ink">{s.name}</span>
+                  {s.detail && <span className="text-mute"> · {s.detail}</span>}
+                </button>
+              </li>
+            );
+          })}
+          {showNoMatches && <li className="px-3 py-2 text-mute">{t("planner.noMatches")}</li>}
         </ul>
       )}
-      {open && !loading && suggestions.length === 0 && shouldQuery(wp.name) && (
-        <ul className="panel absolute inset-x-10 z-30 mt-1 text-xs shadow-xl">
-          <li className="px-3 py-2 text-mute">{t("planner.noMatches")}</li>
-        </ul>
-      )}
+      {locError && <p className="mt-1 text-[10px] text-warn">{t(locError)}</p>}
     </div>
   );
 }
