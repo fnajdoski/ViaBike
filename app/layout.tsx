@@ -3,6 +3,7 @@ import { Inter, Saira_Condensed } from "next/font/google";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 import InstallBanner from "@/components/InstallBanner";
+import IntroGate from "@/components/IntroGate";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import SessionManager from "@/components/SessionManager";
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <SessionManager />
+        <IntroGate />
         {children}
         <InstallBanner />
         <ServiceWorkerRegister />

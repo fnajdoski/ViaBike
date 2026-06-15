@@ -21,7 +21,7 @@ export default function BikePicker() {
   }, [query]);
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-12">
+    <div id="picker-root" tabIndex={-1} className="mx-auto max-w-5xl px-6 py-12 outline-none">
       <p className="text-mute text-sm uppercase tracking-[0.3em]">{t("picker.step1")}</p>
       <h1 className="wordmark-solid mt-1 text-4xl">{t("picker.title")}</h1>
       <p className="text-mute mt-2 max-w-xl text-sm">{t("picker.intro")}</p>

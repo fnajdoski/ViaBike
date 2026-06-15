@@ -3,6 +3,7 @@ import type { MessageKey } from "./en";
 /** Macedonian (Cyrillic). Brand wordmark stays Latin (brand names untranslated). */
 export const mk: Record<MessageKey, string> = {
   "app.subtitle": "Планер за трошоци и застанувања за мотоциклисти",
+  "intro.tagline": "Испланирај ја возката. Знај го трошокот.",
 
   "lang.label": "Јазик",
   "lang.en": "English",
