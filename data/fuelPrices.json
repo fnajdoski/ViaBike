@@ -1,331 +1,331 @@
 {
-  "_lastUpdated": "2026-11-01",
-  "_sourceUpdatedAt": "2026-10-31 11:35:40",
+  "_lastUpdated": "2026-11-15",
+  "_sourceUpdatedAt": "2026-11-08 11:00:08",
   "_source": "OpenVan.camp public fuel API (CC BY 4.0) — https://openvan.camp/en/developers — normalized to EUR/liter (petrol/gasoline 95)",
   "prices": {
     "AD": {
-      "petrol": 1.556
+      "petrol": 1.533
     },
     "AE": {
-      "petrol": 1.044
+      "petrol": 0.998
     },
     "AF": {
-      "petrol": 1.172
+      "petrol": 1.186
     },
     "AL": {
-      "petrol": 2.02
+      "petrol": 1.881
     },
     "AM": {
-      "petrol": 1.555
+      "petrol": 1.574
     },
     "AR": {
-      "petrol": 1.291
+      "petrol": 1.296
     },
     "AT": {
-      "petrol": 1.785
+      "petrol": 1.704
     },
     "AU": {
-      "petrol": 1.507
+      "petrol": 1.437
     },
     "AZ": {
-      "petrol": 0.606
+      "petrol": 0.613
     },
     "BA": {
-      "petrol": 1.694
+      "petrol": 1.664
     },
     "BB": {
-      "petrol": 1.913
+      "petrol": 1.937
     },
     "BD": {
-      "petrol": 1.154
+      "petrol": 1.163
     },
     "BE": {
-      "petrol": 2.002
+      "petrol": 1.94
     },
     "BF": {
       "petrol": 1.296
     },
     "BG": {
-      "petrol": 1.605
+      "petrol": 1.577
     },
     "BH": {
-      "petrol": 0.536
+      "petrol": 0.543
     },
     "BJ": {
       "petrol": 1.143
     },
     "BO": {
-      "petrol": 0.514
+      "petrol": 0.542
     },
     "BR": {
-      "petrol": 1.069
+      "petrol": 1.041
     },
     "BW": {
-      "petrol": 1.282
+      "petrol": 1.283
     },
     "BY": {
-      "petrol": 0.83
+      "petrol": 0.821
     },
     "BZ": {
-      "petrol": 1.643
+      "petrol": 1.638
     },
     "CA": {
-      "petrol": 1.17
+      "petrol": 1.101
     },
     "CD": {
-      "petrol": 1.032
+      "petrol": 1.038
     },
     "CH": {
-      "petrol": 2.357
+      "petrol": 2.251
     },
     "CI": {
       "petrol": 1.38
     },
     "CL": {
-      "petrol": 1.417
+      "petrol": 1.434
     },
     "CN": {
-      "petrol": 1.196
+      "petrol": 1.209
     },
     "CO": {
-      "petrol": 4.446
+      "petrol": 4.338
     },
     "CR": {
-      "petrol": 1.416
+      "petrol": 1.639
     },
     "CU": {
-      "petrol": 0.985
+      "petrol": 0.998
     },
     "CV": {
-      "petrol": 1.788
+      "petrol": 1.717
     },
     "CY": {
-      "petrol": 1.725
+      "petrol": 1.719
     },
     "CZ": {
-      "petrol": 1.789
+      "petrol": 1.714
     },
     "DE": {
-      "petrol": 2.114
+      "petrol": 2.05
     },
     "DJ": {
-      "petrol": 1.558
+      "petrol": 1.58
     },
     "DK": {
-      "petrol": 2.267
+      "petrol": 2.159
     },
     "DO": {
-      "petrol": 1.24
+      "petrol": 1.254
     },
     "DZ": {
-      "petrol": 0.31
+      "petrol": 0.311
     },
     "EC": {
-      "petrol": 0.751
+      "petrol": 0.761
     },
     "EE": {
-      "petrol": 1.899
+      "petrol": 1.897
     },
     "EG": {
-      "petrol": 0.357
+      "petrol": 0.377
     },
     "ES": {
-      "petrol": 1.775
+      "petrol": 1.757
     },
     "ET": {
-      "petrol": 0.929
+      "petrol": 0.944
     },
     "FI": {
-      "petrol": 2.317
+      "petrol": 2.257
     },
     "FJ": {
-      "petrol": 1.258
+      "petrol": 1.267
     },
     "FM": {
       "petrol": 0.979
     },
     "FO": {
-      "petrol": 2.108
+      "petrol": 2.091
     },
     "FR": {
-      "petrol": 2.151
+      "petrol": 2.105
     },
     "GB": {
-      "petrol": 2.082
+      "petrol": 2.055
     },
     "GE": {
-      "petrol": 1.493
+      "petrol": 1.517
     },
     "GH": {
-      "petrol": 1.307
+      "petrol": 1.298
     },
     "GM": {
-      "petrol": 1.338
+      "petrol": 1.333
     },
     "GN": {
-      "petrol": 1.219
+      "petrol": 1.229
     },
     "GR": {
-      "petrol": 2.138
+      "petrol": 2.094
     },
     "GT": {
-      "petrol": 0.993
+      "petrol": 0.967
     },
     "GW": {
       "petrol": 1.371
     },
     "GY": {
-      "petrol": 1.105
+      "petrol": 1.121
     },
     "HK": {
-      "petrol": 3.965
+      "petrol": 4.015
     },
     "HN": {
-      "petrol": 1.229
+      "petrol": 1.244
     },
     "HR": {
-      "petrol": 1.725
+      "petrol": 1.712
     },
     "HT": {
-      "petrol": 1.264
+      "petrol": 1.279
     },
     "HU": {
-      "petrol": 1.766
+      "petrol": 1.74
     },
     "ID": {
-      "petrol": 0.798
+      "petrol": 0.805
     },
     "IE": {
-      "petrol": 1.945
+      "petrol": 1.947
     },
     "IL": {
-      "petrol": 2.214
+      "petrol": 2.218
     },
     "IN": {
-      "petrol": 0.964
+      "petrol": 0.983
     },
     "IQ": {
-      "petrol": 0.502
+      "petrol": 0.509
     },
     "IS": {
-      "petrol": 2.019
+      "petrol": 2.02
     },
     "IT": {
-      "petrol": 2.052
+      "petrol": 2.03
     },
     "JM": {
-      "petrol": 1.358
+      "petrol": 1.38
     },
     "JO": {
-      "petrol": 1.327
+      "petrol": 1.382
     },
     "JP": {
-      "petrol": 0.955
+      "petrol": 0.966
     },
     "KE": {
-      "petrol": 1.566
+      "petrol": 1.584
     },
     "KG": {
-      "petrol": 0.907
+      "petrol": 0.919
     },
     "KH": {
-      "petrol": 1.131
+      "petrol": 1.145
     },
     "KR": {
-      "petrol": 1.247
+      "petrol": 1.259
     },
     "KU": {
-      "petrol": 0.857
+      "petrol": 0.869
     },
     "KW": {
-      "petrol": 0.245
+      "petrol": 0.248
     },
     "KZ": {
-      "petrol": 0.617
+      "petrol": 0.638
     },
     "LA": {
-      "petrol": 1.377
+      "petrol": 1.394
     },
     "LB": {
-      "petrol": 1.289
+      "petrol": 1.236
     },
     "LC": {
-      "petrol": 1.256
+      "petrol": 1.272
     },
     "LI": {
-      "petrol": 2.302
+      "petrol": 2.277
     },
     "LK": {
-      "petrol": 1.115
+      "petrol": 1.156
     },
     "LR": {
-      "petrol": 1.317
+      "petrol": 1.341
     },
     "LS": {
-      "petrol": 1.512
+      "petrol": 1.563
     },
     "LT": {
-      "petrol": 1.896
+      "petrol": 1.847
     },
     "LU": {
-      "petrol": 1.75
+      "petrol": 1.705
     },
     "LV": {
-      "petrol": 1.896
+      "petrol": 1.857
     },
     "MA": {
-      "petrol": 1.418
+      "petrol": 1.407
     },
     "MC": {
-      "petrol": 2.239
+      "petrol": 2.189
     },
     "MD": {
-      "petrol": 1.57
+      "petrol": 1.528
     },
     "ME": {
       "petrol": 1.81
     },
     "MG": {
-      "petrol": 1.034
+      "petrol": 1.049
     },
     "MK": {
-      "petrol": 1.482
+      "petrol": 1.511
     },
     "ML": {
       "petrol": 1.334
     },
     "MM": {
-      "petrol": 1.961
+      "petrol": 1.985
     },
     "MN": {
-      "petrol": 0.914
+      "petrol": 0.926
     },
     "MR": {
-      "petrol": 1.447
+      "petrol": 1.453
     },
     "MT": {
-      "petrol": 1.336
+      "petrol": 1.341
     },
     "MU": {
-      "petrol": 1.473
+      "petrol": 1.481
     },
     "MV": {
-      "petrol": 0.927
+      "petrol": 0.943
     },
     "MW": {
-      "petrol": 2.885
+      "petrol": 2.937
     },
     "MX": {
-      "petrol": 1.139
+      "petrol": 1.166
     },
     "MY": {
-      "petrol": 0.976
+      "petrol": 0.948
     },
     "MZ": {
-      "petrol": 1.324
+      "petrol": 1.341
     },
     "NA": {
-      "petrol": 1.425
+      "petrol": 1.532
     },
     "NC": {
       "petrol": 1.529
@@ -334,181 +334,181 @@
       "petrol": 0.761
     },
     "NG": {
-      "petrol": 1.057
+      "petrol": 1.068
     },
     "NI": {
-      "petrol": 1.164
-    },
-    "NL": {
-      "petrol": 2.317
-    },
-    "NO": {
-      "petrol": 2.416
-    },
-    "NP": {
       "petrol": 1.179
     },
+    "NL": {
+      "petrol": 2.263
+    },
+    "NO": {
+      "petrol": 2.443
+    },
+    "NP": {
+      "petrol": 1.203
+    },
     "NR": {
-      "petrol": 1.527
+      "petrol": 1.49
     },
     "NZ": {
-      "petrol": 1.889
+      "petrol": 1.853
     },
     "OM": {
-      "petrol": 0.557
+      "petrol": 0.563
     },
     "PA": {
-      "petrol": 1.146
+      "petrol": 1.079
     },
     "PE": {
-      "petrol": 1.499
+      "petrol": 1.525
     },
     "PF": {
       "petrol": 1.383
     },
     "PG": {
-      "petrol": 1.161
+      "petrol": 1.199
     },
     "PH": {
-      "petrol": 1.227
+      "petrol": 1.252
     },
     "PK": {
-      "petrol": 1.224
+      "petrol": 1.135
     },
     "PL": {
-      "petrol": 1.478
+      "petrol": 1.432
     },
     "PS": {
-      "petrol": 2.328
+      "petrol": 2.054
     },
     "PT": {
-      "petrol": 2.07
+      "petrol": 2.038
     },
     "PY": {
-      "petrol": 1.144
+      "petrol": 1.095
     },
     "QA": {
-      "petrol": 0.48
+      "petrol": 0.486
     },
     "RO": {
-      "petrol": 1.878
+      "petrol": 1.855
     },
     "RS": {
       "petrol": 1.762
     },
     "RU": {
-      "petrol": 0.859
+      "petrol": 0.826
     },
     "RW": {
-      "petrol": 1.783
+      "petrol": 1.806
     },
     "SA": {
-      "petrol": 0.521
+      "petrol": 0.527
     },
     "SB": {
-      "petrol": 1.244
+      "petrol": 1.253
     },
     "SC": {
-      "petrol": 1.607
+      "petrol": 1.646
     },
     "SE": {
-      "petrol": 1.547
+      "petrol": 1.419
     },
     "SG": {
-      "petrol": 2.523
+      "petrol": 2.527
     },
     "SI": {
-      "petrol": 1.652
+      "petrol": 1.641
     },
     "SK": {
-      "petrol": 1.823
+      "petrol": 1.792
     },
     "SL": {
-      "petrol": 1.562
+      "petrol": 1.579
     },
     "SN": {
       "petrol": 1.509
     },
     "SR": {
-      "petrol": 1.15
+      "petrol": 1.169
     },
     "SS": {
-      "petrol": 2.729
+      "petrol": 2.694
     },
     "SV": {
-      "petrol": 1.136
+      "petrol": 1.151
     },
     "SY": {
-      "petrol": 1.27
+      "petrol": 1.291
     },
     "TG": {
       "petrol": 1.246
     },
     "TH": {
-      "petrol": 1.102
+      "petrol": 1.066
     },
     "TJ": {
-      "petrol": 1.342
+      "petrol": 1.505
     },
     "TL": {
-      "petrol": 1.344
+      "petrol": 1.361
     },
     "TM": {
-      "petrol": 0.336
+      "petrol": 0.35
     },
     "TN": {
-      "petrol": 0.749
+      "petrol": 0.762
     },
     "TO": {
-      "petrol": 2.022
+      "petrol": 2.033
     },
     "TR": {
-      "petrol": 1.366
+      "petrol": 1.36
     },
     "TW": {
-      "petrol": 0.857
+      "petrol": 0.86
     },
     "TZ": {
-      "petrol": 1.377
+      "petrol": 1.39
     },
     "UA": {
-      "petrol": 1.769
+      "petrol": 1.772
     },
     "UG": {
-      "petrol": 1.418
+      "petrol": 1.48
     },
     "US": {
-      "petrol": 1.006
+      "petrol": 0.986
     },
     "UY": {
-      "petrol": 2.019
+      "petrol": 2.023
     },
     "UZ": {
-      "petrol": 0.894
+      "petrol": 0.905
     },
     "VN": {
-      "petrol": 0.924
+      "petrol": 0.761
     },
     "VU": {
-      "petrol": 1.676
+      "petrol": 1.669
     },
     "WS": {
-      "petrol": 1.155
+      "petrol": 1.304
     },
     "XK": {
-      "petrol": 1.57
+      "petrol": 1.52
     },
     "XN": {
-      "petrol": 1.382
+      "petrol": 1.387
     },
     "ZA": {
-      "petrol": 1.622
+      "petrol": 1.621
     },
     "ZM": {
-      "petrol": 1.396
+      "petrol": 1.47
     },
     "ZW": {
-      "petrol": 1.837
+      "petrol": 1.879
     }
   }
 }
